@@ -1,0 +1,43 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+*.moe
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+[Bb]in/
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+[Dd]ocs/
+
+*.suo
+*.sdf
+*.opensdf
+
+*.sublime-workspace
+.gdb_history
