@@ -1,0 +1,20 @@
+/*! \file celty-config.hh.in
+	Defines for static daemon configuration
+*/
+#pragma once
+
+#define DAEMON_NAME "@DAEMON_NAME@"
+
+#define DEFAULT_RUNAS "@DEFAULT_RUNAS@"
+
+#define DEFAULT_LOCKFILE "@DEFAULT_LOCKFILE@"
+
+#define DEFAULT_LOCKDIR "@DEFAULT_LOCKDIR@"
+
+#define DEFAULT_WORKINGDIR "@DEFAULT_WORKINGDIR@"
+
+#define VERSION "@GIT_VERSION@"
+
+#define BUILD "@CMAKE_BUILD_TYPE@"
+
+#define VERSION_STRING VERSION " " BUILD
