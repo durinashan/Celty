@@ -18,7 +18,8 @@ set(DEFAULT_RUNAS "nobody" CACHE STRING "The default user to run as")
 set(DEFAULT_LOCKFILE "${DAEMON_NAME}.lwk" CACHE STRING "The default PID lockfile name")
 set(DEFAULT_LOCKDIR "/var/lock/subsys/" CACHE PATH "The default lock directory")
 set(DEFAULT_WORKINGDIR "/" CACHE PATH "The default working directory")
-
+set(DEFAULT_MODULEDIR "./" CACHE STRING "The relative path to look for modules in")
+set(DEFAULT_MODULEEXT ".moe" CACHE STRING "The default extension for modules")
 
 configure_file ("${PROJECT_ETC_DIR}/celty-config.hh.in"
                 "${PROJECT_BINARY_DIR}/celty-config.hh")
@@ -42,4 +43,4 @@ file(GLOB SOURCES "./*.cc")
 add_executable(celty ${SOURCES})
 
 
-target_link_libraries(celty dl  )
+target_link_libraries(celty dl ev)
