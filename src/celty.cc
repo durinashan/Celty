@@ -71,6 +71,9 @@ int main(int argc, char* argv[]) {
 	/* Actual celty code here */
 	Celty::ModuleLoader::GetInstance()->LoadAll(DEFAULT_MODULEDIR);
 
+
+
+	Celty::ModuleLoader::GetInstance()->UnloadAll();
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
 		close(lockfp);

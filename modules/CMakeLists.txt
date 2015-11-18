@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.3.0)
+project(Celty)
+
+file(GLOB_RECURSE cmklist CMakeLists.txt)
+set(MODULE_DIRS "")
+foreach(fpath ${cmklist})
+	get_filename_component(dpath ${fpath} PATH)
+	set(MODULE_DIRS ${MODULE_DIRS} ${dpath})
+endforeach()
+list(REMOVE_DUPLICATES MODULE_DIRS)
+list(REMOVE_ITEM MODULE_DIRS ${MODULE_DIR})
+
+foreach(MODDIR ${MODULE_DIRS})
+	message(STATUS "Adding Module ${MODDIR}")
+    add_subdirectory(${MODDIR})
+endforeach()

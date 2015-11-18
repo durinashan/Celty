@@ -51,6 +51,9 @@ The location where celty looks for modules.
 
 The extension of the module to load.
 
+**NOTE:** The `.` in the extension name is optional, in that case Celty will look for any filed that is suffixed with a matching string.
+
+
 ##### `DEFAULT_RUNAS`
 	type: string
 	default "nobody"
@@ -62,9 +65,6 @@ The user to run the daemon as.
 	default: "/"
 
 The working directory to use when running as a daemon.
-
-**NOTE:** The `.` in the extension name is optional, in that case Celty will look for any filed that is suffixed with a matching string.
-
 
 
 ## Running
@@ -90,6 +90,16 @@ TODO
 ![Celty](http://i.imgur.com/oKwH6Ho.gif)
 
 ## Modules
+Celty for the most part is all self contained, but if you want to extend this functionality then modules are what you want.
+
+### For users
+Modules are libraries that allow to Celty to do more than what comes out of the box.
+
+If you want to install a module all you need to do is drop the module in the configured module directory and restart Celty. Or alternatively issue the `--sig reload` command.
+
+### For module developers
+The module API is documented under [MODULES.md](docs/MODULES.md)
+
 
 # License
 This project is licensed under the MIT Open Source License, see [LICENSE.md](LICENSE.md) for details.
