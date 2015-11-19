@@ -83,11 +83,10 @@ $ ./celty --sig halt
 ```
 
 ## Configuring
-TODO
+The configuration is stored in a simple key-value list that allows the simple setting of options and values.
 
-
-
-![Celty](http://i.imgur.com/oKwH6Ho.gif)
+### Configuration Options
+The following is list of configuration options.
 
 ## Modules
 Celty for the most part is all self contained, but if you want to extend this functionality then modules are what you want.
@@ -100,6 +99,8 @@ If you want to install a module all you need to do is drop the module in the con
 ### For module developers
 The module API is documented under [MODULES.md](docs/MODULES.md)
 
+
+![Celty](http://i.imgur.com/oKwH6Ho.gif)
 
 # License
 This project is licensed under the MIT Open Source License, see [LICENSE.md](LICENSE.md) for details.

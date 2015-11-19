@@ -44,3 +44,5 @@ Module::~Module(void) {
 	std::cout << "[!] Dummy Module Unloaded" << std::endl;
 }
 ```
+
+For the most part it is self explanatory, it prints out a message when it is loaded and unloaded, and it defines itself as a module with the `MODULE()` deceleration

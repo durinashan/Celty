@@ -114,6 +114,8 @@ static void daemonize(const char* lockfile) {
 	signal(SIGCHLD,  sighndl);
 	signal(SIGUSR1,  sighndl);
 	signal(SIGUSR2,  sighndl);
+	signal(SIGPIPE,  sighndl);
+
 
 
 	/* Finally we fork off */
@@ -162,10 +164,11 @@ static void daemonize(const char* lockfile) {
 
 static void sighndl(int sid) {
 	switch(sid) {
+		case SIGPIPE:
 		case SIGTERM: {
 			exit(0);
 		} case SIGALRM:
-		case SIGCHLD: {
+		  case SIGCHLD: {
 			exit(-1);
 		} case SIGUSR1: {
 			/* --sig status */
