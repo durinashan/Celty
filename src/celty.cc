@@ -23,11 +23,15 @@
 
 #include <ModuleLoader.hh>
 
+#include <Bencode.hh>
+
 
 static void sighndl(int sid);
 static void daemonize(const char* lockfile);
 static int lockfp = 0;
 static int _daemonize = 1;
+
+using namespace Celty;
 
 int main(int argc, char* argv[]) {
 	int c;
@@ -71,8 +75,9 @@ int main(int argc, char* argv[]) {
 	/* Actual celty code here */
 	Celty::ModuleLoader::GetInstance()->LoadAll(DEFAULT_MODULEDIR);
 
-
-
+	std::vector<bennode_base> vals = ParseBencode("9:publisher3:bob17:publisher-webpage15:www.example.com18:publisher.location4:homee");
+	for(auto& var : vals)
+		std::cout << var;
 	Celty::ModuleLoader::GetInstance()->UnloadAll();
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
