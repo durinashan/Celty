@@ -9,7 +9,7 @@ namespace Celty {
 		int index = 0;
 		std::vector<bennode_base> items;
 
-		while((c = input[index++]) != NULL) {
+		while((c = input[index++]) != '\0') {
 			if(isalpha(c)) {
 				switch(c) {
 					case 'i': {
@@ -33,6 +33,8 @@ namespace Celty {
 				}
 			} else if(isdigit(c)) {
 				// So It looks to be a string
+				int _c = std::stoi(c);
+				index += 2; // Skip over the index and
 				std::string tmp;
 				while((c = input[index++]) != ':')
 					tmp += c;
@@ -43,41 +45,5 @@ namespace Celty {
 		}
 
 		return items;
-	}
-	std::ostream& operator<<(std::ostream& os, const bennode_list& bn_d) {
-		for(auto& val : bn_d._value)
-			os << val << "\n";
-		return os;
-	}
-	std::ostream& operator<<(std::ostream& os, const bennode_dictionary& bn_d) {
-		for(auto& val : bn_d._value)
-			os << "[" << val.first << "] " << val.second << "\n";
-		return os;
-	}
-	std::ostream& operator<<(std::ostream& os, const bennode_string& bn_s) {
-		os << bn_s._value << "\n";
-		return os;
-	}
-	std::ostream& operator<<(std::ostream& os, const bennode_integer& bn_i) {
-		os << bn_i._value << "\n";
-		return os;
-	}
-	std::ostream& operator<<(std::ostream& os, const bennode_base& bn_b) {
-		switch(bn_b._type) {
-			case INTEGER: {
-				os << dynamic_cast<bennode_integer>(bn_b);
-				break;
-			} case STRING: {
-				os << dynamic_cast<bennode_string>(bn_b);
-				break;
-			} case LIST: {
-				os << dynamic_cast<bennode_list>(bn_b);
-				break;
-			} case DICTIONARY: {
-				os << dynamic_cast<bennode_dictionary>(bn_b);
-				break;
-			}
-		}
-		return os;
 	}
 }

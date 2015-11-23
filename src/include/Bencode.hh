@@ -24,8 +24,8 @@ namespace Celty {
 
 	class bennode_integer : public bennode_base {
 	public:
-		bennode_type _type;
 		long _value;
+		bennode_type _type;
 		bennode_integer(long value)
 			: _value(value), _type(INTEGER) { }
 	};
@@ -34,8 +34,8 @@ namespace Celty {
 
 	class bennode_string : public bennode_base {
 	public:
-		bennode_type _type;
 		std::string _value;
+		bennode_type _type;
 		bennode_string(const char* value)
 			: _value(value), _type(STRING) { }
 		bennode_string(std::string value)
@@ -46,8 +46,8 @@ namespace Celty {
 
 	class bennode_list : public bennode_base {
 	public:
-		bennode_type _type;
 		std::vector<bennode_base> _value;
+		bennode_type _type;
 
 		bennode_list(void) : _type(LIST) { }
 		bennode_list(std::vector<bennode_base> value)
@@ -62,8 +62,8 @@ namespace Celty {
 
 	class bennode_dictionary : public bennode_base {
 	public:
-		bennode_type _type;
 		std::map<std::string, bennode_base> _value;
+		bennode_type _type;
 
 		bennode_dictionary(void) : _type(DICTIONARY) { }
 		bennode_dictionary(std::map<std::string, bennode_base> value)

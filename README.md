@@ -53,6 +53,8 @@ The extension of the module to load.
 
 **NOTE:** The `.` in the extension name is optional, in that case Celty will look for any filed that is suffixed with a matching string.
 
+**NOTE:** The any module following the standard build method in the `[modules](./modules)` directory will automatically be built with the given extension.
+
 
 ##### `DEFAULT_RUNAS`
 	type: string

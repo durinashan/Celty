@@ -77,7 +77,8 @@ int main(int argc, char* argv[]) {
 
 	std::vector<bennode_base> vals = ParseBencode("9:publisher3:bob17:publisher-webpage15:www.example.com18:publisher.location4:homee");
 	for(auto& var : vals)
-		std::cout << var;
+		std::cout << var._type;
+
 	Celty::ModuleLoader::GetInstance()->UnloadAll();
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
