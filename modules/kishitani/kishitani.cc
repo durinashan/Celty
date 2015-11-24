@@ -1,31 +1,32 @@
-/*! \file dummy.cc
-	A test module
+/*! \file kishitani.cc
+	Kishitani web-ui connector
+	https://github.com/XAMPP/Kishitani
 */
-#include <iostream>
+#include <pqxx/pqxx>
+
 #include <Module.hh>
 
 using Celty::Module;
 using Celty::cfg_map;
 
-MODULE("DummyMod")
+MODULE("Kishitani")
 
 Module::Module(void) {
-	/* Dummy Loaded */
+
 }
 
 Module::~Module(void) {
-	/* Dummy Unloaded */
+
 }
 
 void Module::AnnounceSettings(cfg_map& settings) {
-	/* Settings */
-	UNUSED(settings);
+
 }
 
 void Module::Run(void) {
-	/* Use to spin up any worker threads */
+
 }
 
 void Module::Halt(void) {
-	/* Used to join said threads */
+
 }

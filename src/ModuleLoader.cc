@@ -29,7 +29,7 @@ namespace Celty {
 	}
 
 	ModuleLoader* ModuleLoader::GetInstance(void) {
-		return (ModuleLoader::instance == nullptr) ? (ModuleLoader::instance = new ModuleLoader()) : ModuleLoader::instance;
+		return (ModuleLoader::instance != nullptr) ? ModuleLoader::instance : (ModuleLoader::instance = new ModuleLoader());
 	}
 
 	bool ModuleLoader::LoadModule(std::string module) {
@@ -151,6 +151,16 @@ namespace Celty {
 		}
 		closedir(dp);
 		return true;
+	}
+
+	int ModuleLoader::GetLoadedModuleCount(void) {
+		return this->LoadedModules.size();
+	}
+
+	void ModuleLoader::Foreach(std::function<void(Module*)> const& lambda) {
+		for(auto& module : this->LoadedModules) {
+			lambda(module.second->modu);
+		}
 	}
 
 }

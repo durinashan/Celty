@@ -22,4 +22,10 @@
 
 #define BUILD "@CMAKE_BUILD_TYPE@"
 
-#define VERSION_STRING VERSION " [" BUILD "]"
+#define OS_SHORT "@CMAKE_SYSTEM_NAME@"
+
+#define OS_LONG "@CMAKE_SYSTEM@"
+
+#define VERSION_STRING VERSION " " OS_LONG " [" BUILD "]"
+
+#define CONFIG_FILE_NAME "@CFG_NAME@"

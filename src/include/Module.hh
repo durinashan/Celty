@@ -2,6 +2,8 @@
 	Celty module interface
 */
 #pragma once
+#include <thread>
+#include <Configuration.hh>
 
 #define UNUSED(X) X = X
 
@@ -17,11 +19,15 @@
 	}                                        \
 
 namespace Celty {
+
 	class Module {
 	public:
 		Module(void);
 		virtual ~Module(void);
 
-		// TODO: Add Module interface
+		virtual void AnnounceSettings(cfg_map& settings);
+
+		virtual void Run(void);
+		virtual void Halt(void);
 	};
 }

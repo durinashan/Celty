@@ -4,6 +4,15 @@
 #include <Bencode.hh>
 #include <cctype>
 namespace Celty {
+
+	// std::vector<bencode_base> ParseList(std::string input) {
+
+	// }
+
+	// std::map<std::string, bencode_base> ParseDictionary(std::string input) {
+
+	// }
+
 	std::vector<bennode_base> ParseBencode(std::string input) {
 		int c;
 		int index = 0;
@@ -33,7 +42,7 @@ namespace Celty {
 				}
 			} else if(isdigit(c)) {
 				// So It looks to be a string
-				int _c = std::stoi(c);
+				// int _c = std::stoi(c);
 				index += 2; // Skip over the index and
 				std::string tmp;
 				while((c = input[index++]) != ':')

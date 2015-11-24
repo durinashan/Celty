@@ -20,6 +20,7 @@ set(DEFAULT_LOCKDIR "/var/lock/subsys/" CACHE PATH "The default lock directory")
 set(DEFAULT_WORKINGDIR "/" CACHE PATH "The default working directory")
 set(DEFAULT_MODULEDIR "./" CACHE STRING "The relative path to look for modules in")
 set(DEFAULT_MODULEEXT ".moe" CACHE STRING "The default extension for modules")
+set(CFG_NAME "celty.cfg" CACHE STRING "The name of the config file")
 
 configure_file ("${PROJECT_ETC_DIR}/celty-config.hh.in"
                 "${PROJECT_BINARY_DIR}/celty-config.hh")
@@ -33,7 +34,7 @@ else()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -fno-builtin --param max-inline-insns-auto=100 --param early-inlining-insns=200")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -Wall -Wextra -Wpedantic -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-overflow=1 -Wformat=2 -Wuninitialized -Werror=return-type  -Werror=shadow -fstack-protector -Wformat-security")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -O3 -Wall -Wextra -Wpedantic -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-overflow=1 -Wformat=2 -Wuninitialized -Werror=return-type  -Werror=shadow -fstack-protector -Wformat-security")
 
 
 file(GLOB SOURCES "./*.cc")

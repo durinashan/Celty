@@ -28,22 +28,27 @@
 
 static void sighndl(int sid);
 static void daemonize(const char* lockfile);
+static void dispatch(const char* signame);
+
 static int lockfp = 0;
 static int _daemonize = 1;
 
 using namespace Celty;
 
+
 int main(int argc, char* argv[]) {
 	int c;
+	std::string cfgfile;
 	while(true) {
 		static struct option long_opts[] = {
 			{"keep-head", no_argument, &_daemonize, 0},
 			{"sig", required_argument, 0,		  's'},
+			{"cfg", required_argument, 0,         'c'},
 			{"help", no_argument,      0,         'h'},
 			{0, 0, 0, 0}
 		};
 		int opt_index = 0;
-		c = getopt_long(argc, argv, "s:h", long_opts, &opt_index);
+		c = getopt_long(argc, argv, "s:c:h", long_opts, &opt_index);
 		if(c == -1)
 			break;
 		switch(c) {
@@ -51,7 +56,12 @@ int main(int argc, char* argv[]) {
 				if(long_opts[opt_index].flag != 0)
 					break;
 			} case 's': {
-
+				if (optarg)
+					dispatch(optarg);
+				exit(0);
+			} case 'c': {
+				if (optarg)
+					cfgfile = optarg;
 				break;
 			} case 'h': {
 				exit(0);
@@ -71,15 +81,57 @@ int main(int argc, char* argv[]) {
 		std::cout << "Celty v" << VERSION_STRING << std::endl;
 		std::cout << "[@] NOTICE: Not daemonized" << std::endl;
 	}
+	Celty::Configuration* cfg = Celty::Configuration::GetInstance();
+	Celty::ModuleLoader* modl = Celty::ModuleLoader::GetInstance();
 
-	/* Actual celty code here */
-	Celty::ModuleLoader::GetInstance()->LoadAll(DEFAULT_MODULEDIR);
+	bool loadedcfg = false;
+	if(!cfgfile.empty()) {
+		loadedcfg = cfg->LoadConfig(cfgfile);
+	} else {
+		loadedcfg = cfg->LoadConfig();
+	}
 
-	std::vector<bennode_base> vals = ParseBencode("9:publisher3:bob17:publisher-webpage15:www.example.com18:publisher.location4:homee");
-	for(auto& var : vals)
-		std::cout << var._type;
+	if(!loadedcfg) {
+		if(_daemonize)
+			syslog(LOG_ERR, "Unable to load configuration file!");
+		else
+			std::cerr << "[@] Unable to find configuration file!" << std::endl;
+		exit(-1);
+	}
 
-	Celty::ModuleLoader::GetInstance()->UnloadAll();
+	syslog(LOG_INFO, "Loading Modules");
+	modl->LoadAll(DEFAULT_MODULEDIR);
+	modl->Foreach([=](Celty::Module* mod){
+		mod->AnnounceSettings(cfg->ActiveConfig);
+		mod->Run();
+	});
+	syslog(LOG_INFO, "Loaded %d module(s)", modl->GetLoadedModuleCount());
+	int workers;
+	if(cfg->ActiveConfig.find("workers") == cfg->ActiveConfig.end()) {
+		workers = sysconf(_SC_NPROCESSORS_ONLN);
+	} else {
+		workers = std::stoi(cfg->ActiveConfig["workers"]);
+	}
+
+	if(_daemonize)
+		syslog(LOG_INFO, "Starting %d workers", workers);
+	else
+		std::cout << "[@] Starting " << workers << " workers" << std::endl;
+
+	for(; workers >= 0; workers--) {
+		// Do the thing
+	}
+
+	// Idle around
+
+	syslog(LOG_INFO, "Unloading Modules");
+	modl->Foreach([](Celty::Module* mod){
+		mod->Halt();
+	});
+	modl->UnloadAll();
+
+	delete modl;
+	delete cfg;
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
 		close(lockfp);
@@ -159,6 +211,8 @@ static void daemonize(const char* lockfile) {
 		exit(-1);
 	}
 
+	std::cout << "[@] Celty daemonized to pid " << pid << std::endl;
+
 	/* Redirect standard output streams to /dev/null */
     freopen("/dev/null", "r", stdin);
     freopen("/dev/null", "w", stdout);
@@ -185,5 +239,17 @@ static void sighndl(int sid) {
 		}
 		default: {
 		}
+	}
+}
+
+static void dispatch(const char* signame) {
+	if(strncmp(signame, "status", 6) == 0) {
+
+	} else if (strncmp(signame, "reload", 6) == 0) {
+
+	} else if(strncmp(signame, "halt", 4) == 0) {
+
+	} else {
+		std::cerr << "Unknown signal '" << signame << "'" << std::endl;
 	}
 }

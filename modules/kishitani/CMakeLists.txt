@@ -14,7 +14,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -O3 -Wall -Wextra -W
 file(GLOB SOURCES "./*.cc")
 
 
-add_library(dummy SHARED ${SOURCES})
-set_target_properties(dummy PROPERTIES PREFIX "")
-set_target_properties(dummy PROPERTIES SUFFIX ${DEFAULT_MODULEEXT})
+add_library(kishitani SHARED ${SOURCES})
+target_link_libraries(kishitani pqxx)
+set_target_properties(kishitani PROPERTIES PREFIX "")
+set_target_properties(kishitani PROPERTIES SUFFIX ${DEFAULT_MODULEEXT})
 

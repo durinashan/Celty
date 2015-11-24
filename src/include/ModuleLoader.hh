@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <functional>
 
 namespace Celty {
 	class ModuleLoader {
@@ -44,6 +45,10 @@ namespace Celty {
 		bool LoadAll(std::string dir);
 		bool UnloadAll(void);
 		bool ReloadAll(void);
+
+		void Foreach(std::function<void(Module*)> const& lambda);
+
+		int GetLoadedModuleCount(void);
 
 	};
 }
