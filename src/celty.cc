@@ -35,7 +35,6 @@ static int _daemonize = 1;
 
 using namespace Celty;
 
-
 int main(int argc, char* argv[]) {
 	int c;
 	std::string cfgfile;
@@ -92,10 +91,12 @@ int main(int argc, char* argv[]) {
 	}
 
 	if(!loadedcfg) {
-		if(_daemonize)
-			syslog(LOG_ERR, "Unable to load configuration file!");
-		else
-			std::cerr << "[@] Unable to find configuration file!" << std::endl;
+		syslog(LOG_ERR, "Unable to load configuration file!");
+		std::cerr << "[@] Unable to find configuration file!" << std::endl;
+		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
+		close(lockfp);
+		syslog(LOG_NOTICE, "Terminated");
+		closelog();
 		exit(-1);
 	}
 
@@ -114,11 +115,11 @@ int main(int argc, char* argv[]) {
 	}
 
 	if(_daemonize)
-		syslog(LOG_INFO, "Starting %d workers", workers);
+		syslog(LOG_INFO, "Starting %d worker(s)", workers);
 	else
-		std::cout << "[@] Starting " << workers << " workers" << std::endl;
+		std::cout << "[@] Starting " << workers << " worker(s)" << std::endl;
 
-	for(; workers >= 0; workers--) {
+	for(; workers > 0; workers--) {
 		// Do the thing
 	}
 
@@ -211,7 +212,7 @@ static void daemonize(const char* lockfile) {
 		exit(-1);
 	}
 
-	std::cout << "[@] Celty daemonized to pid " << pid << std::endl;
+	std::cout << "[@] Celty daemonized to pid " << getpid() << std::endl;
 
 	/* Redirect standard output streams to /dev/null */
     freopen("/dev/null", "r", stdin);
