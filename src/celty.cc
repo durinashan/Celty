@@ -109,10 +109,10 @@ int main(int argc, char* argv[]) {
 	});
 	syslog(LOG_INFO, "Loaded %d module(s)", modl->GetLoadedModuleCount());
 	int workers;
-	if(cfg->ActiveConfig.find("workers") == cfg->ActiveConfig.end()) {
+	if(cfg->ActiveConfig.find("Workers") == cfg->ActiveConfig.end()) {
 		workers = sysconf(_SC_NPROCESSORS_ONLN);
 	} else {
-		workers = ((workers = std::stoi(cfg->ActiveConfig["workers"])) == 0) ? sysconf(_SC_NPROCESSORS_ONLN) : workers;
+		workers = ((workers = std::stoi(cfg->ActiveConfig["Workers"])) == 0) ? sysconf(_SC_NPROCESSORS_ONLN) : workers;
 	}
 
 	if(_daemonize)

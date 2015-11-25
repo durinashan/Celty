@@ -23,9 +23,19 @@ namespace Celty {
 	}
 
 	bool Configuration::LoadConfig(std::string path) {
-		std::ifstream file;
 		if(!this->FileExists(path.c_str())) {
 			return false;
+		}
+		std::ifstream file(path);
+		std::string line;
+		while(std::getline(file, line)) {
+			if(line[0] == '#')
+				continue;
+			size_t pos = line.find('=');
+			std::string key = line.substr(0,pos);
+			std::string value = line.substr(pos+1, line.size());
+			if(!key.empty() && !value.empty())
+				this->ActiveConfig.insert(std::pair<std::string, std::string>(key, value));
 		}
 		return true;
 	}
