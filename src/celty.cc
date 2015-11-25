@@ -37,12 +37,14 @@ using namespace Celty;
 
 int main(int argc, char* argv[]) {
 	int c;
-	std::string cfgfile;
+	std::string cfgfile = CONFIG_FILE;
+	std::string modfolder = DEFAULT_MODULEDIR;
 	while(true) {
 		static struct option long_opts[] = {
 			{"keep-head", no_argument, &_daemonize, 0},
 			{"sig", required_argument, 0,		  's'},
 			{"cfg", required_argument, 0,         'c'},
+			{"module-dir", required_argument, 0,  'm'},
 			{"help", no_argument,      0,         'h'},
 			{0, 0, 0, 0}
 		};
@@ -61,6 +63,10 @@ int main(int argc, char* argv[]) {
 			} case 'c': {
 				if (optarg)
 					cfgfile = optarg;
+				break;
+			} case 'm': {
+				if(optarg)
+					modfolder = optarg;
 				break;
 			} case 'h': {
 				exit(0);
@@ -83,12 +89,7 @@ int main(int argc, char* argv[]) {
 	Celty::Configuration* cfg = Celty::Configuration::GetInstance();
 	Celty::ModuleLoader* modl = Celty::ModuleLoader::GetInstance();
 
-	bool loadedcfg = false;
-	if(!cfgfile.empty()) {
-		loadedcfg = cfg->LoadConfig(cfgfile);
-	} else {
-		loadedcfg = cfg->LoadConfig();
-	}
+	bool loadedcfg = cfg->LoadConfig(cfgfile);
 
 	if(!loadedcfg) {
 		syslog(LOG_ERR, "Unable to load configuration file!");
@@ -101,7 +102,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	syslog(LOG_INFO, "Loading Modules");
-	modl->LoadAll(DEFAULT_MODULEDIR);
+	modl->LoadAll(modfolder);
 	modl->Foreach([=](Celty::Module* mod){
 		mod->AnnounceSettings(cfg->ActiveConfig);
 		mod->Run();
@@ -111,7 +112,7 @@ int main(int argc, char* argv[]) {
 	if(cfg->ActiveConfig.find("workers") == cfg->ActiveConfig.end()) {
 		workers = sysconf(_SC_NPROCESSORS_ONLN);
 	} else {
-		workers = std::stoi(cfg->ActiveConfig["workers"]);
+		workers = ((workers = std::stoi(cfg->ActiveConfig["workers"])) == 0) ? sysconf(_SC_NPROCESSORS_ONLN) : workers;
 	}
 
 	if(_daemonize)

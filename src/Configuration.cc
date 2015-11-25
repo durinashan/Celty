@@ -22,10 +22,6 @@ namespace Celty {
 
 	}
 
-	bool Configuration::LoadConfig(void) {
-		return this->LoadConfig("/etc/"CONFIG_FILE_NAME);
-	}
-
 	bool Configuration::LoadConfig(std::string path) {
 		std::ifstream file;
 		if(!this->FileExists(path.c_str())) {

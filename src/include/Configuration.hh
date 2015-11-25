@@ -20,7 +20,6 @@ namespace Celty {
 
 		~Configuration();
 
-		bool LoadConfig(void);
 		bool LoadConfig(std::string path);
 
 	};
