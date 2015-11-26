@@ -1,12 +1,157 @@
 .TH CELTY 1 "November 25, 2015"
 .SH NAME
-celty \- Unix torrent tracker
+celty \- *nix BitTorrent tracker
 .SH SYNOPSIS
 .B celty
-
+[ \fB\-\-keep\-head\fP ]
+[ \fB\-\-cfg\fP \fIFILE\fR ]
+[ \fB\-\-sig\fP \fISIGNAL\fR ]
+[ \fB\-\-module\-dir\fP \fIDIRECTORY\fR ]
 
 .SH DESCRIPTION
-This documents the basic usage of the
+This documents the basic usage and configuration of the
 .B celty
-tracker
+BitTorrent tracker
 
+.PP
+\fBcelty\fP is a easy to setup, high-performance, extensible BitTorrent tracker for *nix systems. For the most part the default configuration options are good to go and you can just start \fBcelty\fP in daemon mode.
+
+.SH OPTIONS
+A summary of the options provided by \fBcelty\fP is included below.
+.TP
+\fB\-\-keep\-head\fP
+Prevents \fBcelty\fP from damonizing, keeping it in the foreground.
+.TP
+\fB\-\-cfg\fP \fIFILE\fR
+Explicitly state where \fBcelty\fP should find the configuration file.
+.TP
+\fB\-\-sig\fP \fISIGNAL\fR
+Send a signal to the running \fBcelty\fP daemon. \fISIGNAL\fR is one of the following.
+
+.SP 1
+    \fBhalt\fP   \- Halt the running daemon
+.SP 1
+    \fBreload\fP \- Reload the running configuration
+.SP 1
+    \fBstatus\fP \- Get the status of the running daemon
+
+.TP
+\fB\-\-module\-dir\fP \fIDIRECTORY\fR
+Explicitly set where \fBcelty\fP looks for modules to load.
+
+.SH CONFIGURATION
+The configuration format that \fBcelty\fP uses is a simple key=value format with # prefixing lines that are a comment.
+
+The following is a list and description of all of the configuration options \fBcelty\fP supports.
+.SS Announce
+.SP 1
+.TP
+\fBAnnounceTime\fP
+The amount of time a client should wait before asking for a new peer list.
+.TP
+\fBAnnounceTimeMin\fP
+The minimum amount of time the client must wait prior to asking for more peers.
+
+.SS API Endpoint
+.TP
+\fBAPIEndpoint\fP
+Enables the \fBcelty\fP API Endpoint
+.TP
+\fBAPIListen\fP
+The address to listen for API requests on.
+.TP
+\fBAPIPort\fP
+The port to listen on for API requests
+
+.SS Blacklist
+.TP
+\fBBlacklistEnabled\fP
+Control the state of the blacklist.
+.TP
+\fBBlacklist\fP
+The path to the blacklist.
+.TP
+\fBBlacklistConnector\fP
+The connector to use to manage the blacklist.
+
+.SS Peers
+.TP
+\fBDefaultPeerNum\fP
+The default number of peers to send to a client if they don't explicitly ask for a number
+.TP
+\fBForgiveLeach\fP
+Forgive clients that never seed.
+
+.SS HTTP Endpoint
+.TP
+\fBHTTPEndpoint\fP
+Set if the HTTP endpoint is enabled or not.
+.TP
+\fBHTTPListen\fP
+The address for the HTTP Endpoint to listen on
+.TP
+\fBHTTPMaxConnections\fP
+The maximum number of HTTP connections to service per worker.
+.TP
+\fBHTTPPort\fP
+The port to listen on for HTTP connections
+.TP
+\fBHTTPReadTimeout\fP
+The amount of time that a read will timeout after.
+.TP
+\fBHTTPReqTimeout\fP
+The amount of time that a request will timeout after.
+.TP
+\fBHTTPWriteTimeout\fP
+The amount of time that a write will timeout after.
+
+.SS Inactivity
+.TP
+\fBInactiveRatio\fP
+The ratio that a client must reach in order to not be marked as inactive.
+.TP
+\fBInactiveRecycle\fP
+Remove torrents that have no peers seeding or leaching.
+.TP
+\fBInactiveSeachInterval\fP
+The interval where \fBcelty\fP will search for inactive peers
+
+.SS Private Tracker
+.TP
+\fBPrivate\fP
+Control if this is a private tracker.
+
+.SS Statistics
+.TP
+\fBStatisticsEnable\fP
+Enable statistic collection.
+.TP
+\fBStatisticsDeep\fP
+Enables deep statistics collection, for things like average connections.
+
+.SS UDP Endpoint
+.TP
+\fBUDPEndpoint\fP
+Set if the UDP Endpoint is enabled or not.
+.TP
+\fBUDPListen\fP
+The address that \fBcelty\fP will listen on for UDP requests
+.TP
+\fBUDPPort\fP
+The port to listen on for UDP requests
+
+.SS Whitelist
+.TP
+\fBWhitlistEnabled\fP
+Control the state of the whitelist.
+.TP
+\fBWhitlist\fP
+The path to the whitelist.
+.TP
+\fBWhitlistConnector\fP
+The connector to use to manage the whitelist.
+
+.SS Miscellaneous
+.TP
+\fBWorkers\fP
+The number of worker threads to start up. Set to 0 for one worker per CPU core.
