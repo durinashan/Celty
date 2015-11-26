@@ -2,13 +2,13 @@
 Dead simple, extensible, unix BitTorrent tracker.
 
 ## Why Celty when there is `X`?
-From what I have experience, all the other trackers, like [Chihaya](https://github.com/chihaya/chihaya) or [Ocelot](https://github.com/WhatCD/Ocelot) all have a plethora of dependencies, strange configuration, or just general lack of useful documentation. The attempt that Celty makes is to make this process dead simple. Celty is mostly self contained, and will work right out of the box.
+From what I have experienced, all the other trackers, like [Chihaya](https://github.com/chihaya/chihaya) or [Ocelot](https://github.com/WhatCD/Ocelot) all have a plethora of dependencies, strange configuration, or just general lack of useful documentation. The attempt that Celty makes is to make this process dead simple. Celty is mostly self contained, and will work right out of the box.
 
 ## Dependencies
 The only thing you need is a fairly modern C++ compiler, CMake for building, and libev for the event loop.
 
 ## Building
-To build Celty, create the build directory, and run cmake from that. E.G:
+To build Celty, create the build directory, and run cmake from that. e.g:
 
 ```
 $ git clone https://github.com/XAMPP/Celty.git celty
@@ -68,6 +68,17 @@ The user to run the daemon as.
 
 The working directory to use when running as a daemon.
 
+##### `CONFIG_DIRECTORY`
+	type: path
+	default: "/etc"
+
+The default directory that Celty will look for configuration files in.
+
+##### `CONFIG_FILE`
+	type: string
+	default: "celty.cfg"
+
+The default name of the configuration file that Celty will look for.
 
 ## Running
 To run Celty, just run the build executable, it should fork of to a headless process as a daemon, or you can prevent it from daemonizing by passing the `--keep-head` option
@@ -85,10 +96,7 @@ $ ./celty --sig halt
 ```
 
 ## Configuring
-The configuration is stored in a simple key-value list that allows the simple setting of options and values.
-
-### Configuration Options
-The following is list of configuration options.
+The configuration is stored in a simple key-value list that allows the simple setting of options and values. For more information on this as well as documentation on all of the settings, see [CONFIGURATION.md](docs/CONFIGURATION.md)
 
 ## Modules
 Celty for the most part is all self contained, but if you want to extend this functionality then modules are what you want.
