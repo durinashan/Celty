@@ -1,6 +1,8 @@
 # Celty
 Dead simple, extensible, unix BitTorrent tracker.
 
+**NOTICE:** This project is still in development, it's not quite working yet.
+
 ## Why Celty when there is `X`?
 From what I have experienced, all the other trackers, like [Chihaya](https://github.com/chihaya/chihaya) or [Ocelot](https://github.com/WhatCD/Ocelot) all have a plethora of dependencies, strange configuration, or just general lack of useful documentation. The attempt that Celty makes is to make this process dead simple. Celty is mostly self contained, and will work right out of the box.
 
@@ -55,6 +57,11 @@ The extension of the module to load.
 
 **NOTE:** The any module following the standard build method in the `[modules](./modules)` directory will automatically be built with the given extension.
 
+##### `BUILD_MODULES`
+	type: boolean
+	default: yes
+
+Builds the modules along with Celty
 
 ##### `DEFAULT_RUNAS`
 	type: string
@@ -79,6 +86,12 @@ The default directory that Celty will look for configuration files in.
 	default: "celty.cfg"
 
 The default name of the configuration file that Celty will look for.
+
+##### `PID_FILE`
+	type: string
+	default: "/tmp/celty.pid"
+
+The location the Celty daemon writes a PID file for signaling.
 
 ## Running
 To run Celty, just run the build executable, it should fork of to a headless process as a daemon, or you can prevent it from daemonizing by passing the `--keep-head` option

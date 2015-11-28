@@ -312,8 +312,10 @@ static void dispatch(const char* signame) {
 	if(strncmp(signame, "status", 6) == 0) {
 		sig = SIGUSR1;
 	} else if (strncmp(signame, "reload", 6) == 0) {
+		std::cout << "[@] Reloading Configuration" << std::endl;
 		sig = SIGHUP;
 	} else if(strncmp(signame, "halt", 4) == 0) {
+		std::cout << "[@] Stopping Celty..." << std::endl;
 		sig = SIGTERM;
 	} else {
 		std::cerr << "Unknown signal '" << signame << "'" << std::endl;

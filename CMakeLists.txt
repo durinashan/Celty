@@ -18,12 +18,15 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 set(PROJECT_ETC_DIR ${CMAKE_SOURCE_DIR}/etc)
 set(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set(MODULE_DIR ${CMAKE_SOURCE_DIR}/modules)
+option(BUILD_MODULES "Build the modules with Celty" ON)
+
 
 include_directories("${PROJECT_INCLUDE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}")
 
 
 add_subdirectory(src)
-add_subdirectory(modules)
-
+if(BUILD_MODULES)
+	add_subdirectory(modules)
+endif()
 
