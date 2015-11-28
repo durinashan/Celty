@@ -45,4 +45,6 @@ namespace Celty {
 		struct stat buffer;
   		return (stat(path, &buffer) == 0);
 	}
+
+
 }

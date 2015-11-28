@@ -1,5 +1,5 @@
 /*! \file celty.cc
-	Main entrypoint
+	Main entry point
 */
 #include <celty-config.hh>
 
@@ -19,13 +19,17 @@
 
 #include <iostream>
 #include <chrono>
-#include <thread>
+#include <vector>
 
+#include <Configuration.hh>
 #include <ModuleLoader.hh>
+#include <Statistician.hh>
+#include <Endpoint.hh>
 
 #include <Bencode.hh>
 
 
+static void evsighndl(ev::sig& sig, int i);
 static void sighndl(int sid);
 static void daemonize(const char* lockfile);
 static void dispatch(const char* signame);
@@ -86,8 +90,9 @@ int main(int argc, char* argv[]) {
 		std::cout << "Celty v" << VERSION_STRING << std::endl;
 		std::cout << "[@] NOTICE: Not daemonized" << std::endl;
 	}
-	Celty::Configuration* cfg = Celty::Configuration::GetInstance();
-	Celty::ModuleLoader* modl = Celty::ModuleLoader::GetInstance();
+	Configuration* cfg = Configuration::GetInstance();
+	ModuleLoader* modl = ModuleLoader::GetInstance();
+	Statistician* stats = Statistician::GetInstance();
 
 	bool loadedcfg = cfg->LoadConfig(cfgfile);
 
@@ -120,11 +125,43 @@ int main(int argc, char* argv[]) {
 	else
 		std::cout << "[@] Starting " << workers << " worker(s)" << std::endl;
 
+	std::vector<Endpoint*> endpoints;
+	endpoints.reserve(workers);
+
+	ev::default_loop loop;
+
+	ev::sig sigint;
+	ev::sig sigkill;
+	ev::sig sigterm;
+
+	sigint.set<&evsighndl>();
+	sigint.start(SIGINT);
+	sigkill.set<&evsighndl>();
+	sigkill.start(SIGKILL);
+	sigterm.set<&evsighndl>();
+	sigterm.start(SIGTERM);
+
 	for(; workers > 0; workers--) {
-		// Do the thing
+		// Endpoint* e = new Endpoint(/* TODO */);
+		// e->Start();
+		// endpoints.push_back(e);
 	}
 
-	// Idle around
+	loop.run(0);
+
+	if(_daemonize)
+		syslog(LOG_INFO, "Halting workers");
+	else
+		std::cout << "[@] Halting workers " << std::endl;
+
+	sigint.stop();
+	sigkill.stop();
+	sigterm.stop();
+
+	for(auto e : endpoints) {
+		e->Halt();
+		delete e;
+	}
 
 	syslog(LOG_INFO, "Unloading Modules");
 	modl->Foreach([](Celty::Module* mod){
@@ -134,6 +171,7 @@ int main(int argc, char* argv[]) {
 
 	delete modl;
 	delete cfg;
+	delete stats;
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
 		close(lockfp);
@@ -194,10 +232,10 @@ static void daemonize(const char* lockfile) {
 
 	parent = getppid();
 	signal(SIGCHLD,	SIG_DFL); /* A child process dies */
-    signal(SIGTSTP,	SIG_IGN); /* Various TTY signals */
-    signal(SIGTTOU,	SIG_IGN);
-    signal(SIGTTIN,	SIG_IGN);
-    signal(SIGTERM,	SIG_DFL); /* Die on SIGTERM */
+	signal(SIGTSTP,	SIG_IGN); /* Various TTY signals */
+	signal(SIGTTOU,	SIG_IGN);
+	signal(SIGTTIN,	SIG_IGN);
+	signal(SIGTERM,	SIG_DFL); /* Die on SIGTERM */
 
 	umask(0);
 
@@ -216,12 +254,17 @@ static void daemonize(const char* lockfile) {
 	std::cout << "[@] Celty daemonized to pid " << getpid() << std::endl;
 
 	/* Redirect standard output streams to /dev/null */
-    freopen("/dev/null", "r", stdin);
-    freopen("/dev/null", "w", stdout);
-    freopen("/dev/null", "w", stderr);
+	freopen("/dev/null", "r", stdin);
+	freopen("/dev/null", "w", stdout);
+	freopen("/dev/null", "w", stderr);
 
-    /* Kill the parent process */
-    kill(parent, SIGUSR1);
+	/* Kill the parent process */
+	kill(parent, SIGUSR1);
+}
+
+static void evsighndl(ev::sig& sig, int i) {
+	sig.loop.break_loop(ev::ALL);
+	sig.stop();
 }
 
 static void sighndl(int sid) {
