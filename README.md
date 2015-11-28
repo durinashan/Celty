@@ -127,3 +127,4 @@ The module API is documented under [MODULES.md](https://github.com/XAMPP/Celty/b
 
 # License
 This project is licensed under the MIT Open Source License, see [LICENSE.md](https://github.com/XAMPP/Celty/blob/master/LICENSE.md) for details.
+

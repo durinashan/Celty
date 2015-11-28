@@ -178,6 +178,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	if(_daemonize) {
+		if(remove(PID_FILE) < 0 ) {
+			syslog(LOG_ERR, "Unable to remove PID file %s, error code: %d (%s)", PID_FILE, errno, strerror(errno));
+		}
 		syslog(LOG_NOTICE, "Terminated");
 		closelog();
 	}
