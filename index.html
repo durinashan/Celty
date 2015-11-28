@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Celty by XAMPP</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/XAMPP/Celty">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/XAMPP/Celty/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/XAMPP/Celty/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Celty</h1>
+          <p>Dead simple, extensible, *nix BitTorrent tracker </p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/XAMPP">XAMPP</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a id="celty" class="anchor" href="#celty" aria-hidden="true"><span class="octicon octicon-link"></span></a>Celty</h1>
+
+<p>Dead simple, extensible, unix BitTorrent tracker.</p>
+
+<p><strong>NOTICE:</strong> This project is still in development, it's not quite working yet.</p>
+
+<h2>
+<a id="why-celty-when-there-is-x" class="anchor" href="#why-celty-when-there-is-x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Celty when there is <code>X</code>?</h2>
+
+<p>From what I have experienced, all the other trackers, like <a href="https://github.com/chihaya/chihaya">Chihaya</a> or <a href="https://github.com/WhatCD/Ocelot">Ocelot</a> all have a plethora of dependencies, strange configuration, or just general lack of useful documentation. The attempt that Celty makes is to make this process dead simple. Celty is mostly self contained, and will work right out of the box.</p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<p>The only thing you need is a fairly modern C++ compiler, CMake for building, and libev for the event loop.</p>
+
+<h2>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
+
+<p>To build Celty, create the build directory, and run cmake from that. e.g:</p>
+
+<pre><code>$ git clone https://github.com/XAMPP/Celty.git celty
+$ mkdir celty-build
+$ cd !$
+cd celty-build
+$ cmake ../celty
+$ make
+</code></pre>
+
+<p>For the most part the default options will be fine, but if you want to change anything, here is a list of available build options.</p>
+
+<h5>
+<a id="daemon_name" class="anchor" href="#daemon_name" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DAEMON_NAME</code>
+</h5>
+
+<pre><code>type: string
+default: "celty"
+</code></pre>
+
+<p>The name of the daemon, it will be used on all the logs and other messages</p>
+
+<h5>
+<a id="default_lockdir" class="anchor" href="#default_lockdir" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_LOCKDIR</code>
+</h5>
+
+<pre><code>type: path
+default: "/var/lock/subsys"
+</code></pre>
+
+<p>The location of the lock file for the daemonized process</p>
+
+<h5>
+<a id="default_lockfile" class="anchor" href="#default_lockfile" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_LOCKFILE</code>
+</h5>
+
+<pre><code>type: string
+default: "celty.lwk"
+</code></pre>
+
+<p>The name of the lock file to use</p>
+
+<h5>
+<a id="default_moduledir" class="anchor" href="#default_moduledir" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_MODULEDIR</code>
+</h5>
+
+<pre><code>type: string
+default: "./"
+</code></pre>
+
+<p>The location where celty looks for modules.</p>
+
+<h5>
+<a id="default_moduleext" class="anchor" href="#default_moduleext" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_MODULEEXT</code>
+</h5>
+
+<pre><code>type: string
+default: ".moe"
+</code></pre>
+
+<p>The extension of the module to load.</p>
+
+<p><strong>NOTE:</strong> The <code>.</code> in the extension name is optional, in that case Celty will look for any filed that is suffixed with a matching string.</p>
+
+<p><strong>NOTE:</strong> The any module following the standard build method in the <code>[modules](./modules)</code> directory will automatically be built with the given extension.</p>
+
+<h5>
+<a id="build_modules" class="anchor" href="#build_modules" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>BUILD_MODULES</code>
+</h5>
+
+<pre><code>type: boolean
+default: yes
+</code></pre>
+
+<p>Builds the modules along with Celty</p>
+
+<h5>
+<a id="default_runas" class="anchor" href="#default_runas" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_RUNAS</code>
+</h5>
+
+<pre><code>type: string
+default "nobody"
+</code></pre>
+
+<p>The user to run the daemon as.</p>
+
+<h5>
+<a id="default_workingdir" class="anchor" href="#default_workingdir" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_WORKINGDIR</code>
+</h5>
+
+<pre><code>type: string
+default: "/"
+</code></pre>
+
+<p>The working directory to use when running as a daemon.</p>
+
+<h5>
+<a id="config_directory" class="anchor" href="#config_directory" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>CONFIG_DIRECTORY</code>
+</h5>
+
+<pre><code>type: path
+default: "/etc"
+</code></pre>
+
+<p>The default directory that Celty will look for configuration files in.</p>
+
+<h5>
+<a id="config_file" class="anchor" href="#config_file" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>CONFIG_FILE</code>
+</h5>
+
+<pre><code>type: string
+default: "celty.cfg"
+</code></pre>
+
+<p>The default name of the configuration file that Celty will look for.</p>
+
+<h5>
+<a id="pid_file" class="anchor" href="#pid_file" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>PID_FILE</code>
+</h5>
+
+<pre><code>type: string
+default: "/tmp/celty.pid"
+</code></pre>
+
+<p>The location the Celty daemon writes a PID file for signaling.</p>
+
+<h2>
+<a id="running" class="anchor" href="#running" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running</h2>
+
+<p>To run Celty, just run the build executable, it should fork of to a headless process as a daemon, or you can prevent it from daemonizing by passing the <code>--keep-head</code> option</p>
+
+<p>Once Celty has forked off, you still might want to get stats or reload the configuration, this can be done using the <code>--sig</code> flag. E.G</p>
+
+<pre><code>$ ./celty
+[@] Celty daemonized to pid 12345
+$ ./celty --sig status
+[@] Running
+$ ./celty --sig reload
+[@] Reloading Configuration
+$ ./celty --sig halt
+[@] Stopping Celty....
+</code></pre>
+
+<h2>
+<a id="configuring" class="anchor" href="#configuring" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuring</h2>
+
+<p>The configuration is stored in a simple key-value list that allows the simple setting of options and values. For more information on this as well as documentation on all of the settings, see <a href="docs/CONFIGURATION.md">CONFIGURATION.md</a></p>
+
+<h2>
+<a id="modules" class="anchor" href="#modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Modules</h2>
+
+<p>Celty for the most part is all self contained, but if you want to extend this functionality then modules are what you want.</p>
+
+<h3>
+<a id="for-users" class="anchor" href="#for-users" aria-hidden="true"><span class="octicon octicon-link"></span></a>For users</h3>
+
+<p>Modules are libraries that allow to Celty to do more than what comes out of the box.</p>
+
+<p>If you want to install a module all you need to do is drop the module in the configured module directory and restart Celty. Or alternatively issue the <code>--sig reload</code> command.</p>
+
+<h3>
+<a id="for-module-developers" class="anchor" href="#for-module-developers" aria-hidden="true"><span class="octicon octicon-link"></span></a>For module developers</h3>
+
+<p>The module API is documented under <a href="docs/MODULES.md">MODULES.md</a></p>
+
+<p><img src="http://i.imgur.com/oKwH6Ho.gif" alt="Celty"></p>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p>This project is licensed under the MIT Open Source License, see <a href="LICENSE.md">LICENSE.md</a> for details.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
