@@ -22,6 +22,7 @@ set(DEFAULT_MODULEDIR "./" CACHE STRING "The relative path to look for modules i
 set(DEFAULT_MODULEEXT ".moe" CACHE STRING "The default extension for modules")
 set(CONFIG_DIRECTORY "/etc/" CACHE STRING "The default configuratio file directory")
 set(CONFIG_FILE "celty.cfg" CACHE STRING "The name of the config file")
+set(PID_FILE "/tmp/celty.pid" CACHE STRING "The pid file celty will use for signaling")
 
 configure_file ("${PROJECT_ETC_DIR}/celty-config.hh.in"
                 "${PROJECT_BINARY_DIR}/celty-config.hh")

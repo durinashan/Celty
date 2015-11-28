@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
 		syslog(LOG_INFO, "Celty %s Spinning up...", VERSION_STRING);
 		daemonize(DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
 	} else {
-		std::cout << "Celty v" << VERSION_STRING << std::endl;
+		std::cout << "Celty " << VERSION_STRING << std::endl;
 		std::cout << "[@] NOTICE: Not daemonized" << std::endl;
 	}
 	Configuration* cfg = Configuration::GetInstance();
@@ -186,7 +186,8 @@ int main(int argc, char* argv[]) {
 
 
 static void daemonize(const char* lockfile) {
-	pid_t pid, sid, parent;
+	pid_t pid, sid, parent, cpid;
+	int pidfd;
 	/* In the case we are already daemonized */
 	if(getppid() == 1) return;
 	/* Try to obtain a lock */
@@ -251,7 +252,17 @@ static void daemonize(const char* lockfile) {
 		exit(-1);
 	}
 
-	std::cout << "[@] Celty daemonized to pid " << getpid() << std::endl;
+	cpid = getpid();
+	if((pidfd = open(PID_FILE, O_CREAT | O_RDWR, 0640)) < 0) {
+		syslog(LOG_ERR, "Unable to create PID file %s, error code: %d (%s)", PID_FILE, errno, strerror(errno));
+		exit(-1);
+	}
+	char buff[10];
+	snprintf(buff, sizeof(buff), "%d", cpid);
+	write(pidfd, buff, strlen(buff));
+	close(pidfd);
+
+	std::cout << "[@] Celty daemonized to pid " << cpid << std::endl;
 
 	/* Redirect standard output streams to /dev/null */
 	freopen("/dev/null", "r", stdin);
@@ -277,10 +288,8 @@ static void sighndl(int sid) {
 			exit(-1);
 		} case SIGUSR1: {
 			/* --sig status */
-		} case SIGUSR2: {
-			/* --sig reload */
 		} case SIGHUP: {
-			/* --sig halt */
+			/* --sig reload */
 		}
 		default: {
 		}
@@ -288,13 +297,30 @@ static void sighndl(int sid) {
 }
 
 static void dispatch(const char* signame) {
+	int pidfd;
+	if((pidfd = open(PID_FILE, O_CREAT | O_RDWR, 0640)) < 0) {
+		std::cerr << "Unable to open PID file " << PID_FILE << ", error code: "<< errno << " ("<< strerror(errno) <<")" << std::endl;
+		exit(-1);
+	}
+	char buff[10];
+	read(pidfd, buff, sizeof(buff));
+	int pid = atoi(buff);
+	close(pidfd);
+
+	int sig;
+
 	if(strncmp(signame, "status", 6) == 0) {
-
+		sig = SIGUSR1;
 	} else if (strncmp(signame, "reload", 6) == 0) {
-
+		sig = SIGHUP;
 	} else if(strncmp(signame, "halt", 4) == 0) {
-
+		sig = SIGTERM;
 	} else {
 		std::cerr << "Unknown signal '" << signame << "'" << std::endl;
+	}
+
+	if(kill(pid, sig) < 0) {
+		std::cerr << "Unable to send signal, error code: "<< errno << " ("<< strerror(errno) <<")" << std::endl;
+		exit(-1);
 	}
 }
