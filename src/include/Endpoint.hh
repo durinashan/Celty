@@ -11,6 +11,7 @@ namespace Celty {
 		enum EndpointType {
 			HTTP,
 			UDP,
+			API,
 		};
 	private:
 		EndpointType     _type;

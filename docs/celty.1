@@ -62,6 +62,9 @@ The address to listen for API requests on.
 .TP
 \fBAPIPort\fP
 The port to listen on for API requests
+.TP
+\fBAPIKey\fP
+The authentication key to be used when API requests are made.
 
 .SS Blacklist
 .TP
@@ -129,6 +132,11 @@ Enable statistic collection.
 \fBStatisticsDeep\fP
 Enables deep statistics collection, for things like average connections.
 
+.SS Scheduler
+.TP
+\fBScheduler\fP
+The request queue scheduling algorithm.
+
 .SS UDP Endpoint
 .TP
 \fBUDPEndpoint\fP
@@ -155,3 +163,5 @@ The connector to use to manage the whitelist.
 .TP
 \fBWorkers\fP
 The number of worker threads to start up. Set to 0 for one worker per CPU core.
+
+.SH Scheduler

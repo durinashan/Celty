@@ -19,6 +19,10 @@ The address to listen on for API requests.
 ##### APIPort
 	default: 2600
 The port to listen on for API requests.
+##### APIKey
+	default: 3A56A140FDBEE941897F5526D2230600DAB
+The authentication key to be used when API requests are made.
+**NOTE:** You should really, really change this, it can be anything you want except for spaces, and should be hard to guess.
 ##### BlacklistEnabled
 	default: no
 Set if the blacklist is enabled or not.
