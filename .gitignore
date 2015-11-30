@@ -41,3 +41,4 @@
 
 *.sublime-workspace
 .gdb_history
+*.lwk

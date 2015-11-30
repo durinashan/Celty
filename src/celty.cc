@@ -273,7 +273,7 @@ static void daemonize(const char* lockfile) {
 	freopen("/dev/null", "w", stderr);
 
 	/* Kill the parent process */
-	kill(parent, SIGUSR1);
+	kill(parent, SIGTERM);
 }
 
 static void evsighndl(ev::sig& sig, int i) {
