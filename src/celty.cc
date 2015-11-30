@@ -105,14 +105,19 @@ int main(int argc, char* argv[]) {
 		closelog();
 		exit(-1);
 	}
-
-	syslog(LOG_INFO, "Loading Modules");
+	if(_daemonize)
+		syslog(LOG_INFO, "Loading Modules");
+	else
+		std::cout << "[@] Loading Modules" << std::endl;
 	modl->LoadAll(modfolder);
 	modl->Foreach([=](Celty::Module* mod){
 		mod->AnnounceSettings(cfg->ActiveConfig);
 		mod->Run();
 	});
-	syslog(LOG_INFO, "Loaded %d module(s)", modl->GetLoadedModuleCount());
+	if(_daemonize)
+		syslog(LOG_INFO, "Loaded %d module(s)", modl->GetLoadedModuleCount());
+	else
+		std::cout << "[@] Loaded " << modl->GetLoadedModuleCount() << " module(s)" << std::endl;
 	int workers;
 	if(cfg->ActiveConfig.find("Workers") == cfg->ActiveConfig.end()) {
 		workers = sysconf(_SC_NPROCESSORS_ONLN);
@@ -126,7 +131,7 @@ int main(int argc, char* argv[]) {
 		std::cout << "[@] Starting " << workers << " worker(s)" << std::endl;
 
 	std::vector<Endpoint*> endpoints;
-	endpoints.reserve(workers);
+	endpoints.reserve(workers+1);
 
 	ev::default_loop loop;
 
@@ -147,12 +152,24 @@ int main(int argc, char* argv[]) {
 		// endpoints.push_back(e);
 	}
 
+	if(cfg->ActiveConfig.find("APIEndpoint") != cfg->ActiveConfig.end()) {
+		if(cfg->ActiveConfig["APIEndpoint"] == "yes") {
+			if(_daemonize)
+				syslog(LOG_INFO, "Starting API Endpoint");
+			else
+				std::cout << "[@] Starting API Endpoint" << std::endl;
+			Endpoint* eapi = new Endpoint(Endpoint::API, cfg->ActiveConfig["APIListen"], cfg->ActiveConfig["APIPort"]);
+			eapi->Start();
+			endpoints.push_back(eapi);
+		}
+	}
+
 	loop.run(0);
 
 	if(_daemonize)
 		syslog(LOG_INFO, "Halting workers");
 	else
-		std::cout << "[@] Halting workers " << std::endl;
+		std::cout << std::endl << "[@] Halting workers " << std::endl;
 
 	sigint.stop();
 	sigkill.stop();
@@ -162,8 +179,11 @@ int main(int argc, char* argv[]) {
 		e->Halt();
 		delete e;
 	}
+	if(_daemonize)
+		syslog(LOG_INFO, "Unloading Modules");
+	else
+		std::cout << "[@] Unloading Modules" << std::endl;
 
-	syslog(LOG_INFO, "Unloading Modules");
 	modl->Foreach([](Celty::Module* mod){
 		mod->Halt();
 	});
@@ -172,6 +192,7 @@ int main(int argc, char* argv[]) {
 	delete modl;
 	delete cfg;
 	delete stats;
+
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
 		close(lockfp);
@@ -183,6 +204,9 @@ int main(int argc, char* argv[]) {
 		}
 		syslog(LOG_NOTICE, "Terminated");
 		closelog();
+	}
+	if(!_daemonize) {
+		std::cout << "[@] Bye Bye" << std::endl;
 	}
 	return 0;
 }
@@ -276,7 +300,7 @@ static void daemonize(const char* lockfile) {
 	kill(parent, SIGTERM);
 }
 
-static void evsighndl(ev::sig& sig, int i) {
+static void evsighndl(ev::sig& sig, int) {
 	sig.loop.break_loop(ev::ALL);
 	sig.stop();
 }
@@ -293,6 +317,7 @@ static void sighndl(int sid) {
 			/* --sig status */
 		} case SIGHUP: {
 			/* --sig reload */
+			Configuration::GetInstance()->ReloadConfiguration();
 		}
 		default: {
 		}
@@ -310,7 +335,7 @@ static void dispatch(const char* signame) {
 	int pid = atoi(buff);
 	close(pidfd);
 
-	int sig;
+	int sig = SIGTSTP;
 
 	if(strncmp(signame, "status", 6) == 0) {
 		sig = SIGUSR1;

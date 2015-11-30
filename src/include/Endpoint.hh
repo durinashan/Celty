@@ -20,10 +20,13 @@ namespace Celty {
 		ev::dynamic_loop *loop;
 		int 		     sockfd;
 		std::thread      t;
+		std::string		 listen;
+		std::string		 port;
+
 
 		void Runner(void);
 	public:
-		Endpoint(EndpointType type, std::string listen_addr, std::string port);
+		Endpoint(EndpointType type, std::string listen_addr, std::string listen_port);
 		~Endpoint(void);
 
 		void Start(void);

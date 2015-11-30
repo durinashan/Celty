@@ -26,7 +26,7 @@ namespace Celty {
 		if(!this->FileExists(path.c_str())) {
 			return false;
 		}
-		std::ifstream file(path);
+		std::ifstream file((this->cfg_path = path));
 		std::string line;
 		while(std::getline(file, line)) {
 			if(line[0] == '#')
@@ -44,6 +44,11 @@ namespace Celty {
 	bool Configuration::FileExists(const char* path) {
 		struct stat buffer;
   		return (stat(path, &buffer) == 0);
+	}
+
+	void Configuration::ReloadConfiguration(void) {
+		this->ActiveConfig.clear();
+		this->LoadConfig(this->cfg_path);
 	}
 
 

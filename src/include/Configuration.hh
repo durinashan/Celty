@@ -12,6 +12,7 @@ namespace Celty {
 		static Configuration* instance;
 
 		bool FileExists(const char* path);
+		std::string cfg_path;
 
 	public:
 		cfg_map ActiveConfig;
@@ -21,6 +22,8 @@ namespace Celty {
 		~Configuration();
 
 		bool LoadConfig(std::string path);
+
+		void ReloadConfiguration(void);
 
 	};
 }

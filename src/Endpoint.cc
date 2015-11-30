@@ -12,9 +12,8 @@
 #include <arpa/inet.h>
 
 namespace Celty {
-	Endpoint::Endpoint(EndpointType type, std::string listen_addr, std::string port) {
-
-	}
+	Endpoint::Endpoint(EndpointType type, std::string listen_addr, std::string listen_port) :
+		_type(type), listen(listen_addr), port(listen_port) { }
 
 	Endpoint::~Endpoint(void) {
 		if(this->loop != nullptr)
