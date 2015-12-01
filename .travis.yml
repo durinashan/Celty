@@ -9,7 +9,7 @@ addons:
       packages:
          - cmake
          - libev-dev
-         - libpqxx-dev
+         - libpqxx3-dev
 before_script:
   - mkdir build
   - cd build
