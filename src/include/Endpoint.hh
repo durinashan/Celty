@@ -4,7 +4,9 @@
 #pragma once
 #include <string>
 #include <ev++.h>
+
 #include <thread>
+
 namespace Celty {
 	class Endpoint {
 	public:

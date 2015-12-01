@@ -6,10 +6,15 @@ compiler:
   - clang
 addons:
    apt:
+      sources:
+         - ubuntu-toolchain-r-test
       packages:
+         - g++-5
          - cmake
          - libev-dev
          - libpqxx3-dev
+before_install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
 before_script:
   - mkdir build
   - cd build
