@@ -9,7 +9,7 @@ addons:
       sources:
          - kalakris-cmake
       packages:
-         - cmake3
+         - cmake
 before_script:
   - mkdir build
   - cd build
