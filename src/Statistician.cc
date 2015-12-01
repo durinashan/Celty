@@ -3,10 +3,16 @@
 */
 #include <Statistician.hh>
 namespace Celty {
-	Statistician* Statistician::instance = nullptr;
+	std::mutex Statistician::_mtlock;
+	std::shared_ptr<Statistician> Statistician::instance = nullptr;
 
-	Statistician* Statistician::GetInstance(void) {
-		return (Statistician::instance != nullptr) ? Statistician::instance : (Statistician::instance = new Statistician());
+	std::shared_ptr<Statistician>& Statistician::GetInstance(void) {
+		if(!Statistician::instance) {
+			std::lock_guard<std::mutex> lock(Statistician::_mtlock);
+			if(!Statistician::instance)
+				Statistician::instance.reset(new Statistician());
+		}
+		return Statistician::instance;
 	}
 
 	Statistician::Statistician(void) {

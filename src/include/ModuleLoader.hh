@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <mutex>
+#include <memory>
 
 namespace Celty {
 	class ModuleLoader {
@@ -25,8 +27,10 @@ namespace Celty {
 			Module* modu;
 		};
 
-		static ModuleLoader* instance;
+		static std::shared_ptr<ModuleLoader> instance;
 		static std::string ending;
+
+		static std::mutex _mtlock;
 
 		ModuleLoader(void);
 
@@ -36,7 +40,7 @@ namespace Celty {
 		std::map<std::string, module_t*> LoadedModules;
 		~ModuleLoader(void);
 
-		static ModuleLoader* GetInstance(void);
+		static std::shared_ptr<ModuleLoader>& GetInstance(void);
 
 		bool LoadModule(std::string module);
 		bool UnloadModule(std::string module);

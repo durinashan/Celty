@@ -9,9 +9,15 @@
 #include <fstream>
 
 namespace Celty {
-	Configuration* Configuration::instance = nullptr;
-	Configuration* Configuration::GetInstance(void) {
-		return (Configuration::instance != nullptr) ? Configuration::instance : (Configuration::instance = new Configuration);
+	std::mutex Configuration::_mtlock;
+	std::shared_ptr<Configuration> Configuration::instance = nullptr;
+	std::shared_ptr<Configuration>& Configuration::GetInstance(void) {
+		if(!Configuration::instance) {
+			std::lock_guard<std::mutex> lock(Configuration::_mtlock);
+			if(!Configuration::instance)
+				Configuration::instance.reset(new Configuration());
+		}
+		return Configuration::instance;
 	}
 
 	Configuration::Configuration(void) {

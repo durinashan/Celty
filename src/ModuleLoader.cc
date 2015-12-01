@@ -17,7 +17,8 @@
 #include <celty-config.hh>
 
 namespace Celty {
-	ModuleLoader* ModuleLoader::instance = nullptr;
+	std::mutex ModuleLoader::_mtlock;
+	std::shared_ptr<ModuleLoader> ModuleLoader::instance = nullptr;
 	std::string ModuleLoader::ending = DEFAULT_MODULEEXT;
 
 	ModuleLoader::ModuleLoader(void) {
@@ -28,8 +29,13 @@ namespace Celty {
 		this->UnloadAll();
 	}
 
-	ModuleLoader* ModuleLoader::GetInstance(void) {
-		return (ModuleLoader::instance != nullptr) ? ModuleLoader::instance : (ModuleLoader::instance = new ModuleLoader());
+	std::shared_ptr<ModuleLoader>& ModuleLoader::GetInstance(void) {
+		if(!ModuleLoader::instance) {
+			std::lock_guard<std::mutex> lock(ModuleLoader::_mtlock);
+			if(!ModuleLoader::instance)
+				ModuleLoader::instance.reset(new ModuleLoader());
+		}
+		return ModuleLoader::instance;
 	}
 
 	bool ModuleLoader::LoadModule(std::string module) {

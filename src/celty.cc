@@ -90,9 +90,9 @@ int main(int argc, char* argv[]) {
 		std::cout << "Celty " << VERSION_STRING << std::endl;
 		std::cout << "[@] NOTICE: Not daemonized" << std::endl;
 	}
-	Configuration* cfg = Configuration::GetInstance();
-	ModuleLoader* modl = ModuleLoader::GetInstance();
-	Statistician* stats = Statistician::GetInstance();
+	auto cfg = Configuration::GetInstance();
+	auto modl = ModuleLoader::GetInstance();
+	auto stats = Statistician::GetInstance();
 
 	bool loadedcfg = cfg->LoadConfig(cfgfile);
 
@@ -188,10 +188,6 @@ int main(int argc, char* argv[]) {
 		mod->Halt();
 	});
 	modl->UnloadAll();
-
-	delete modl;
-	delete cfg;
-	delete stats;
 
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
