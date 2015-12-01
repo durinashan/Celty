@@ -8,6 +8,8 @@ addons:
    apt:
       packages:
          - cmake
+         - libev-dev
+         - libpqxx-dev
 before_script:
   - mkdir build
   - cd build
