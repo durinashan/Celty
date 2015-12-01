@@ -29,6 +29,9 @@ configure_file ("${PROJECT_ETC_DIR}/celty-config.hh.in"
 
 include_directories(${PROJECT_BINARY_DIR})
 
+if($ENV{CE_BUILD_TYPE} STREQUAL "Release")
+	set(CMAKE_BUILD_TYPE "Release")
+endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
