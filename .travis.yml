@@ -6,7 +6,7 @@ compiler:
   - clang
 env:
   - CE_BUILD_TYPE=Debug
-  - CE_BUILD_TYPE=Release
+  # - CE_BUILD_TYPE=Release
 addons:
    apt:
       sources:
@@ -27,6 +27,6 @@ script:
 notifications:
   irc:
     channels:
-      - "irc.bad-alloc.net#bad_alloc"
+      - "irc.bad-alloc.net:6669#bad_alloc"
     template:
       - "%{repository_slug} (%{branch} @ %{commit}) : %{message} %{result} "
