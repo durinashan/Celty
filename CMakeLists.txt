@@ -21,6 +21,14 @@ set(MODULE_DIR ${CMAKE_SOURCE_DIR}/modules)
 option(BUILD_MODULES "Build the modules with Celty" ON)
 
 
+if (CMAKE_COMPILER_IS_GNUCXX)
+	execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion
+					OUTPUT_VARIABLE GCC_VERSION)
+	if (GCC_VERSION VERSION_LESS 5.1)
+			message(FATAL_ERROR "Need GCC Version 5.1 or newer")
+	endif()
+endif()
+
 include_directories("${PROJECT_INCLUDE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}")
 
