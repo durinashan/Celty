@@ -70,7 +70,7 @@ namespace Celty {
 			: _value(value), _type(DICTIONARY) { }
 
 		void append(std::string key, bennode_base& value) {
-			_value.emplace(std::make_pair(key, value));
+			_value.insert(std::make_pair(key, value));
 		}
 	};
 
