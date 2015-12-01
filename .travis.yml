@@ -6,8 +6,6 @@ compiler:
   - clang
 addons:
    apt:
-      sources:
-         - kalakris-cmake
       packages:
          - cmake
 before_script:
