@@ -7,7 +7,7 @@ Dead simple, extensible, unix BitTorrent tracker.
 From what I have experienced, all the other trackers, like [Chihaya](https://github.com/chihaya/chihaya) or [Ocelot](https://github.com/WhatCD/Ocelot) all have a plethora of dependencies, strange configuration, or just general lack of useful documentation. The attempt that Celty makes is to make this process dead simple. Celty is mostly self contained, and will work right out of the box.
 
 ## Dependencies
-The only thing you need is a fairly modern C++ compiler, CMake for building, and libev for the event loop.
+The only thing you need is a fairly modern C++ compiler (clang >= 3.6 or GCC >= 5.1), CMake for building, and libev for the event loop.
 
 ## Building
 To build Celty, create the build directory, and run cmake from that. e.g:
