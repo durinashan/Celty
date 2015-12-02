@@ -131,7 +131,7 @@ int main(int argc, char* argv[]) {
 		std::cout << "[@] Starting " << workers << " worker(s)" << std::endl;
 
 	std::vector<Endpoint*> endpoints;
-	endpoints.reserve(workers+1);
+	endpoints.reserve(workers*2+1);
 
 	ev::default_loop loop;
 
@@ -146,23 +146,40 @@ int main(int argc, char* argv[]) {
 	sigterm.set<&evsighndl>();
 	sigterm.start(SIGTERM);
 
-	for(; workers > 0; workers--) {
-		// Endpoint* e = new Endpoint(/* TODO */);
-		// e->Start();
-		// endpoints.push_back(e);
-	}
-
-	if(cfg->ActiveConfig.find("APIEndpoint") != cfg->ActiveConfig.end()) {
-		if(cfg->ActiveConfig["APIEndpoint"] == "yes") {
-			if(_daemonize)
-				syslog(LOG_INFO, "Starting API Endpoint");
-			else
-				std::cout << "[@] Starting API Endpoint" << std::endl;
-			Endpoint* eapi = new Endpoint(Endpoint::API, cfg->ActiveConfig["APIListen"], cfg->ActiveConfig["APIPort"]);
-			eapi->Start();
-			endpoints.push_back(eapi);
+	if(cfg->SettingEnabled("UDPEndpoint")) {
+		std::string port = (cfg->SettingEnabled("UDPPort")) ? cfg->ActiveConfig["UDPPort"] : "6881";
+		std::string host = (cfg->SettingEnabled("UDPListen")) ? cfg->ActiveConfig["UDPListen"] : "0.0.0.0";
+		for(int udpe = 0; udpe < workers; ++udpe) {
+			Endpoint* e = new Endpoint(Endpoint::UDP, host, port);
+			e->Start();
+			endpoints.push_back(e);
 		}
 	}
+
+	if(cfg->SettingEnabled("HTTPEndpoint")) {
+		std::string port = (cfg->SettingEnabled("HTTPPort")) ? cfg->ActiveConfig["HTTPPort"] : "6881";
+		std::string host = (cfg->SettingEnabled("HTTPListen")) ? cfg->ActiveConfig["HTTPListen"] : "0.0.0.0";
+		for(int httpe = 0; httpe < workers; ++httpe) {
+			Endpoint* e = new Endpoint(Endpoint::HTTP, host, port);
+			e->Start();
+			endpoints.push_back(e);
+		}
+	}
+
+	if(cfg->SettingEnabled("APIEndpoint")) {
+		if(_daemonize)
+			syslog(LOG_INFO, "Starting API Endpoint");
+		else
+			std::cout << "[@] Starting API Endpoint" << std::endl;
+		Endpoint* eapi = new Endpoint(Endpoint::API, cfg->ActiveConfig["APIListen"], cfg->ActiveConfig["APIPort"]);
+		eapi->Start();
+		endpoints.push_back(eapi);
+	}
+
+	if(_daemonize)
+		syslog(LOG_INFO, "%lu running endpoints", endpoints.size());
+	else
+		std::cout << "[@] " << endpoints.size() << " running endpoints" << std::endl;
 
 	loop.run(0);
 
@@ -179,6 +196,7 @@ int main(int argc, char* argv[]) {
 		e->Halt();
 		delete e;
 	}
+
 	if(_daemonize)
 		syslog(LOG_INFO, "Unloading Modules");
 	else
@@ -188,8 +206,6 @@ int main(int argc, char* argv[]) {
 		mod->Halt();
 	});
 	modl->UnloadAll();
-
-
 
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
@@ -219,6 +235,7 @@ static void daemonize(const char* lockfile) {
 	if(lockfile && lockfile[0]) {
 		lockfp = open(lockfile, O_RDWR | O_CREAT, 0640);
 		if(lockfp < 0) {
+			std::cerr << "[!] Unable to create lock file " << lockfile << ", error code:" << errno << " (" << strerror(errno) << ")" << std::endl;
 			syslog(LOG_ERR, "Unable to create lock file %s, error code: %d (%s)", lockfile, errno, strerror(errno));
 			exit(-1);
 		}
@@ -316,6 +333,7 @@ static void sighndl(int sid) {
 		} case SIGHUP: {
 			/* --sig reload */
 			Configuration::GetInstance()->ReloadConfiguration();
+			syslog(LOG_INFO, "Reloaded Configuration");
 		}
 		default: {
 		}

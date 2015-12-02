@@ -57,5 +57,14 @@ namespace Celty {
 		this->LoadConfig(this->cfg_path);
 	}
 
+	bool Configuration::SettingEnabled(std::string key) {
+		if(this->ActiveConfig.find(key) != this->ActiveConfig.end()) {
+			if(this->ActiveConfig[key] == "yes") {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 }

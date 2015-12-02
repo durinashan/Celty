@@ -27,5 +27,7 @@ namespace Celty {
 
 		void ReloadConfiguration(void);
 
+		bool SettingEnabled(std::string key);
+
 	};
 }
