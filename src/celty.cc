@@ -189,6 +189,8 @@ int main(int argc, char* argv[]) {
 	});
 	modl->UnloadAll();
 
+
+
 	if(lockfp < 0) {
 		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
 		close(lockfp);
