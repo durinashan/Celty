@@ -14,6 +14,8 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/file.h>
+
 
 #include <getopt.h>
 
@@ -36,6 +38,7 @@ static void dispatch(const char* signame);
 
 static int lockfp = 0;
 static int _daemonize = 1;
+static struct flock fl;
 
 using namespace Celty;
 
@@ -210,12 +213,20 @@ int main(int argc, char* argv[]) {
 	});
 	modl->UnloadAll();
 
-	if(lockfp < 0) {
-		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
+	if(lockfp > 0) {
+		if(flock(lockfp, LOCK_UN | LOCK_NB) < 0) {
+			std::cerr << "[!] Unable to unlock " << DEFAULT_LOCK << ", error code:" << errno << " (" << strerror(errno) << ")" << std::endl;
+		}
+		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCK);
 		close(lockfp);
 	}
 
 	if(_daemonize) {
+		fl.l_type = F_UNLCK;
+		if(fcntl(lockfp, F_SETLKW, &fl) < 0) {
+			std::cerr << "[!] Unable to unlock " << DEFAULT_LOCK << ", error code:" << errno << " (" << strerror(errno) << ")" << std::endl;
+			syslog(LOG_ERR, "Unable to unlock %s, error code: %d (%s)", DEFAULT_LOCK, errno, strerror(errno));
+		}
 		if(remove(PID_FILE) < 0 ) {
 			syslog(LOG_ERR, "Unable to remove PID file %s, error code: %d (%s)", PID_FILE, errno, strerror(errno));
 		}
@@ -308,6 +319,19 @@ static void daemonize(const char* lockfile) {
 	close(pidfd);
 
 	std::cout << "[@] Celty daemonized to pid " << cpid << std::endl;
+
+	/* We are now fully deamonized so now we can properly lock */
+	fl.l_type = F_WRLCK;
+	fl.l_whence = SEEK_SET;
+	fl.l_start = 0;
+	fl.l_len = 0;
+	fl.l_pid = cpid;
+
+	if(fcntl(lockfp, F_SETLKW, &fl) < 0) {
+		std::cerr << "[!] Unable to lock file " << lockfile << ", error code:" << errno << " (" << strerror(errno) << ")" << std::endl;
+		syslog(LOG_ERR, "Unable to lock file %s, error code: %d (%s)", lockfile, errno, strerror(errno));
+		exit(-1);
+	}
 
 	/* Redirect standard output streams to /dev/null */
 	freopen("/dev/null", "r", stdin);
