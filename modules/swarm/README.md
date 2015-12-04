@@ -7,7 +7,7 @@ This module requires `libmemcahced` to build.
 ## Example Usage
 Swam can be used to set up a high-availability tracker solution as depicted below.
 
-![tracker.academy.city](http://i.imgur.com/Mw3yRLB.png)
+![tracker.academy.city](http://i.imgur.com/54LauIg.png)
 
 In this example the load balancer is nginx using the [provided configuration](https://github.com/XAMPP/Celty/blob/master/etc/celty-proxy.conf)
 
