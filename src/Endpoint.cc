@@ -15,7 +15,7 @@
 
 namespace Celty {
 Endpoint::Endpoint(EndpointType type, std::string listen_addr, std::string listen_port)
-	: loop(ev::AUTO), _type(type), listen(listen_addr), port(listen_port) {}
+	: _type(type), loop(ev::AUTO), listen(listen_addr), port(listen_port) {}
 
 Endpoint::~Endpoint(void) {}
 
