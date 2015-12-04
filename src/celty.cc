@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 			{0, 0, 0, 0}
 		};
 		int opt_index = 0;
-		c = getopt_long(argc, argv, "s:c:h", long_opts, &opt_index);
+		c = getopt_long(argc, argv, "s:c:m:h", long_opts, &opt_index);
 		if(c == -1)
 			break;
 		switch(c) {
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 	if(_daemonize) {
 		openlog(DAEMON_NAME, LOG_PID, LOG_LOCAL5);
 		syslog(LOG_INFO, "Celty %s Spinning up...", VERSION_STRING);
-		daemonize(DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
+		daemonize(DEFAULT_LOCK);
 	} else {
 		std::cout << "Celty " << VERSION_STRING << std::endl;
 		std::cout << "[@] NOTICE: Not daemonized" << std::endl;
@@ -97,18 +97,21 @@ int main(int argc, char* argv[]) {
 	bool loadedcfg = cfg->LoadConfig(cfgfile);
 
 	if(!loadedcfg) {
-		syslog(LOG_ERR, "Unable to load configuration file!");
-		std::cerr << "[@] Unable to find configuration file!" << std::endl;
-		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCKDIR DEFAULT_LOCKFILE);
+		syslog(LOG_ERR, "Unable to load configuration file %s", cfgfile.c_str());
+		std::cerr << "[@] Unable to find configuration file " << cfgfile << std::endl;
+		syslog(LOG_INFO, "Releasing lock file %s", DEFAULT_LOCK);
 		close(lockfp);
+		if(remove(PID_FILE) < 0 ) {
+			syslog(LOG_ERR, "Unable to remove PID file %s, error code: %d (%s)", PID_FILE, errno, strerror(errno));
+		}
 		syslog(LOG_NOTICE, "Terminated");
 		closelog();
 		exit(-1);
 	}
 	if(_daemonize)
-		syslog(LOG_INFO, "Loading Modules");
+		syslog(LOG_INFO, "Loading Modules from %s", modfolder.c_str());
 	else
-		std::cout << "[@] Loading Modules" << std::endl;
+		std::cout << "[@] Loading Modules from " << modfolder << std::endl;
 	modl->LoadAll(modfolder);
 	modl->Foreach([=](Celty::Module* mod){
 		mod->AnnounceSettings(cfg->ActiveConfig);
@@ -119,7 +122,7 @@ int main(int argc, char* argv[]) {
 	else
 		std::cout << "[@] Loaded " << modl->GetLoadedModuleCount() << " module(s)" << std::endl;
 	int workers;
-	if(cfg->ActiveConfig.find("Workers") == cfg->ActiveConfig.end()) {
+	if(cfg->SettingEnabled("Workers")) {
 		workers = sysconf(_SC_NPROCESSORS_ONLN);
 	} else {
 		workers = ((workers = std::stoi(cfg->ActiveConfig["Workers"])) == 0) ? sysconf(_SC_NPROCESSORS_ONLN) : workers;

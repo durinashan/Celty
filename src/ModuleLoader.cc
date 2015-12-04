@@ -40,7 +40,7 @@ namespace Celty {
 
 	bool ModuleLoader::LoadModule(std::string module) {
 		module_t* mod = new module_t;
-		mod->handle = dlopen(("./"+module).c_str(), RTLD_LAZY);
+		mod->handle = dlopen((module).c_str(), RTLD_LAZY);
 		if(!mod->handle) {
 			std::cout << "Error loading module '" << module << "'. " << dlerror() << std::endl;
 			delete mod;
@@ -91,7 +91,7 @@ namespace Celty {
 			if it fails we need to remove the module for the
 			loaded list
 		*/
-		mod->handle = dlopen(("./"+module).c_str(), RTLD_LAZY);
+		mod->handle = dlopen((module).c_str(), RTLD_LAZY);
 		if(!mod->handle) {
 			std::cout << "Error loading module '" << module << "'. " << dlerror() << std::endl;
 			delete mod;
@@ -128,7 +128,7 @@ namespace Celty {
 			return  (0 != name.compare(name.length() - ModuleLoader::ending.length(), ModuleLoader::ending.length(), ModuleLoader::ending));
 		}), files.end());
 		for(auto& module : files) {
-			if(!this->LoadModule(module))
+			if(!this->LoadModule(dir + "/" + module))
 				return false;
 		}
 		return true;
