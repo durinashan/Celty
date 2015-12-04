@@ -7,27 +7,27 @@
 #include <mutex>
 #include <memory>
 namespace Celty {
-	typedef	std::map<std::string, std::string> cfg_map;
-	class Configuration {
+typedef std::map<std::string, std::string> cfg_map;
+class Configuration {
 	private:
-		Configuration(void);
-		static std::shared_ptr<Configuration> instance;
+	Configuration(void);
+	static std::shared_ptr<Configuration> instance;
 
-		bool FileExists(const char* path);
-		std::string cfg_path;
-		static std::mutex _mtlock;
+	bool FileExists(const char *path);
+	std::string cfg_path;
+	static std::mutex _mtlock;
+
 	public:
-		cfg_map ActiveConfig;
+	cfg_map ActiveConfig;
 
-		static std::shared_ptr<Configuration>& GetInstance(void);
+	static std::shared_ptr<Configuration> &GetInstance(void);
 
-		~Configuration();
+	~Configuration();
 
-		bool LoadConfig(std::string path);
+	bool LoadConfig(std::string path);
 
-		void ReloadConfiguration(void);
+	void ReloadConfiguration(void);
 
-		bool SettingEnabled(std::string key);
-
-	};
+	bool SettingEnabled(std::string key);
+};
 }

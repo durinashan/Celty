@@ -11,31 +11,28 @@
 using Celty::Module;
 using Celty::cfg_map;
 
-static memcached_st* memc = nullptr;
+static memcached_st *memc = nullptr;
 static std::string connstr;
 
 MODULE("Swarm")
 
-Module::Module(void) {
-
-}
+Module::Module(void) {}
 
 Module::~Module(void) {
-	if(memc != nullptr)
+	if (memc != nullptr)
 		memcached_free(memc);
 }
 
-void Module::AnnounceSettings(cfg_map& settings) {
-	if(settings.find("SwarmMemcachedHost") == settings.end())
+void Module::AnnounceSettings(cfg_map &settings) {
+	if (settings.find("SwarmMemcachedHost") == settings.end())
 		std::cerr << "[!] Unable to load Swarm, no memcached host." << std::endl;
 	connstr = "--SERVER=" + settings["SwarmMemcachedHost"] + ":" + settings["SwarmMemcachedPort"];
 }
 
 void Module::Run(void) {
 	memc = memcached(connstr.c_str(), connstr.size());
+	if (memc == nullptr)
+		std::cerr << "[!] Unable to connect to memcached instance" << std::endl;
 }
 
-void Module::Halt(void) {
-
-}
-
+void Module::Halt(void) {}

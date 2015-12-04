@@ -5,16 +5,16 @@
 #include <mutex>
 #include <memory>
 namespace Celty {
-	class Statistician {
+class Statistician {
 	private:
-		Statistician(void);
+	Statistician(void);
 
-		static std::shared_ptr<Statistician> instance;
-		static std::mutex _mtlock;
+	static std::shared_ptr<Statistician> instance;
+	static std::mutex _mtlock;
 
 	public:
-		~Statistician(void);
+	~Statistician(void);
 
-		static std::shared_ptr<Statistician>& GetInstance(void);
-	};
+	static std::shared_ptr<Statistician> &GetInstance(void);
+};
 }

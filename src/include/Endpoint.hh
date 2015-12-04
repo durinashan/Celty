@@ -8,38 +8,38 @@
 #include <thread>
 
 namespace Celty {
-	class Endpoint {
+class Endpoint {
 	public:
-		enum EndpointType {
-			HTTP,
-			UDP,
-			API,
-		};
-	private:
-		EndpointType     _type;
-		ev::io 		     eio;
-		ev::sig 	     esig;
-		ev::dynamic_loop loop;
-		ev::timer 		 timer;
-		ev::async 		 ashalt;
-		int 		     sockfd;
-		std::thread      t;
-		std::string		 listen;
-		std::string		 port;
-
-
-		void Runner(void);
-		void Timeout(void);
-		void AsyncHalt(void);
-	public:
-		Endpoint(EndpointType type, std::string listen_addr, std::string listen_port);
-		~Endpoint(void);
-
-		void Start(void);
-		void Halt(void);
-
-
-		Endpoint(Endpoint&) = delete;
-		Endpoint(Endpoint&&) = delete;
+	enum EndpointType {
+		HTTP,
+		UDP,
+		API,
 	};
+
+	private:
+	EndpointType _type;
+	ev::io eio;
+	ev::sig esig;
+	ev::dynamic_loop loop;
+	ev::timer timer;
+	ev::async ashalt;
+	int sockfd;
+	std::thread t;
+	std::string listen;
+	std::string port;
+
+	void Runner(void);
+	void Timeout(void);
+	void AsyncHalt(void);
+
+	public:
+	Endpoint(EndpointType type, std::string listen_addr, std::string listen_port);
+	~Endpoint(void);
+
+	void Start(void);
+	void Halt(void);
+
+	Endpoint(Endpoint &) = delete;
+	Endpoint(Endpoint &&) = delete;
+};
 }

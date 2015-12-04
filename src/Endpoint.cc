@@ -14,43 +14,39 @@
 #include <iostream>
 
 namespace Celty {
-	Endpoint::Endpoint(EndpointType type, std::string listen_addr, std::string listen_port) :
-		loop(ev::AUTO), _type(type), listen(listen_addr), port(listen_port) { }
+Endpoint::Endpoint(EndpointType type, std::string listen_addr, std::string listen_port)
+	: loop(ev::AUTO), _type(type), listen(listen_addr), port(listen_port) {}
 
-	Endpoint::~Endpoint(void) {
+Endpoint::~Endpoint(void) {}
 
-	}
+void Endpoint::Runner(void) {
+	this->timer.set(this->loop);
+	this->timer.set<Endpoint, &Endpoint::Timeout>(this);
+	this->timer.start(4, 4);
 
-	void Endpoint::Runner(void) {
-		this->timer.set(this->loop);
-		this->timer.set<Endpoint, &Endpoint::Timeout>(this);
-		this->timer.start(4, 4);
+	this->ashalt.set(this->loop);
+	this->ashalt.set<Endpoint, &Endpoint::AsyncHalt>(this);
+	this->ashalt.start();
 
-		this->ashalt.set(this->loop);
-		this->ashalt.set<Endpoint, &Endpoint::AsyncHalt>(this);
-		this->ashalt.start();
+	// Server Code
 
-		// Server Code
+	this->loop.run(0);
+}
 
-		this->loop.run(0);
-	}
+void Endpoint::Start(void) { this->t = std::thread(&Endpoint::Runner, this); }
 
-	void Endpoint::Start(void) {
-		this->t = std::thread(&Endpoint::Runner, this);
-	}
+void Endpoint::Halt(void) {
+	this->ashalt.send();
+	this->t.join();
+}
 
-	void Endpoint::Halt(void) {
-		this->ashalt.send();
-		this->t.join();
-	}
+void Endpoint::Timeout(void) {
+	// Disconnect code
+}
 
-	void Endpoint::Timeout(void) {
-		// Disconnect code
-	}
-
-	void Endpoint::AsyncHalt(void) {
-		this->ashalt.stop();
-		this->timer.stop();
-		this->loop.break_loop(ev::ALL);
-	}
+void Endpoint::AsyncHalt(void) {
+	this->ashalt.stop();
+	this->timer.stop();
+	this->loop.break_loop(ev::ALL);
+}
 }
