@@ -36,7 +36,6 @@ static void dispatch(const char *signame);
 
 static int lockfp = 0;
 static int _daemonize = 1;
-static struct flock fl;
 
 using namespace Celty;
 

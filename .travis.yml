@@ -6,7 +6,7 @@ compiler:
   - clang
 env:
   - CE_BUILD_TYPE=Debug
-  # - CE_BUILD_TYPE=Release
+  - CE_BUILD_TYPE=Release
 addons:
    apt:
       sources:
