@@ -7,6 +7,9 @@ compiler:
 env:
   - CE_BUILD_TYPE=Debug
   - CE_BUILD_TYPE=Release
+os:
+  - linux
+  - osx
 addons:
    apt:
       sources:
