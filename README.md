@@ -61,7 +61,11 @@ The extension of the module to load.
 	type: boolean
 	default: yes
 
-Builds the modules along with Celty
+Builds the modules along with Celty.
+
+**NOTE:** Each module should have a `BUILD_*NAME*_MODULE` that allows you to control each module being built.
+
+**NOTE:** Some modules might have explicit dependencies and will fail to build, check each modules readme for a list of dependencies.
 
 ##### `DEFAULT_RUNAS`
 	type: string
