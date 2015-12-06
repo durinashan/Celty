@@ -25,7 +25,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 	execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion
 					OUTPUT_VARIABLE GCC_VERSION)
 	if (GCC_VERSION VERSION_LESS 5.1)
-			message(FATAL_ERROR "Need GCC Version 5.1 or newer")
+			message(FATAL_ERROR "Need GCC Version 5.1 or newer got ${GCC_VERSION}")
 	endif()
 endif()
 
