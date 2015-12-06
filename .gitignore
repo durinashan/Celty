@@ -42,3 +42,5 @@
 *.sublime-workspace
 .gdb_history
 *.lwk
+callgrind.out.*
+cachegrind.out.*

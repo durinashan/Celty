@@ -2,7 +2,7 @@
 If you want to help get Celty off the ground, well help is always wanted, so here is a bit of a documentation on how to best do that.
 
 ## Get Involved
-The best way to help is to poke around the source and fix bugs or add features, but along with that discussion is an important part. So with that joining the IRC channel `TODO` on freenode will get you started.
+The best way to help is to poke around the source and fix bugs or add features, but along with that discussion is an important part. So with that joining the IRC channel `#Celty` on freenode will get you started.
 
 ## Contribution Guidelines
 
@@ -14,3 +14,7 @@ Pull requests should be submitted only if all the tests pass and the build works
 
 ### Module only Contributions
 If you wish to have your module be part of the core Celty distribution, raise it as an issue, we will review the module and if it is accepted, we will add it as a git submodule to the modules directory.
+
+
+## Legal stuff
+Seeing as the BitTorrent protocol is often used in unsavory means a lot of the time, it's important to note that the contributors to this project do not endorse illegal downloading of content, or if you do, keep it to yourself, we don't need to know.

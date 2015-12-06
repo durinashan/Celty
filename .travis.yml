@@ -9,7 +9,7 @@ env:
   - CE_BUILD_TYPE=Release
 os:
   - linux
-  - osx
+  # - osx
 matrix:
   allow_failures:
     - os: osx
@@ -23,7 +23,7 @@ addons:
          - libev-dev
          - libpqxx3-dev
 before_install:
-  - if ! ["$TRAVIS_OS_NAME" = "osx"] && [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+  - if  [ ! "$TRAVIS_OS_NAME" = "osx"] && [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
 before_script:
   - mkdir build
   - cd build
