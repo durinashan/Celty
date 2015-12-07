@@ -32,6 +32,8 @@ class Endpoint {
 	void Timeout(void);
 	void AsyncHalt(void);
 
+	void EVIORead(ev::io &watcher, int revent);
+
 	public:
 	Endpoint(EndpointType type, std::string listen_addr, std::string listen_port);
 	~Endpoint(void);

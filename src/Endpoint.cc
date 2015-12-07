@@ -24,6 +24,9 @@ void Endpoint::Runner(void) {
 	this->timer.set<Endpoint, &Endpoint::Timeout>(this);
 	this->timer.start(4, 4);
 
+	this->eio.set(this->loop);
+	this->eio.set<Endpoint, &Endpoint::EVIORead>(this);
+
 	this->ashalt.set(this->loop);
 	this->ashalt.set<Endpoint, &Endpoint::AsyncHalt>(this);
 	this->ashalt.start();
@@ -42,6 +45,10 @@ void Endpoint::Halt(void) {
 
 void Endpoint::Timeout(void) {
 	// Disconnect code
+}
+
+void Endpoint::EVIORead(ev::io& watcher, int revent) {
+
 }
 
 void Endpoint::AsyncHalt(void) {
