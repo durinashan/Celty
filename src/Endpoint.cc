@@ -20,18 +20,19 @@ Endpoint::Endpoint(EndpointType type, std::string listen_addr, std::string liste
 Endpoint::~Endpoint(void) {}
 
 void Endpoint::Runner(void) {
+	// Setup socket
+
 	this->timer.set(this->loop);
 	this->timer.set<Endpoint, &Endpoint::Timeout>(this);
 	this->timer.start(4, 4);
 
 	this->eio.set(this->loop);
 	this->eio.set<Endpoint, &Endpoint::EVIORead>(this);
+	this->eio.start(this->sockfd, ev::READ);
 
 	this->ashalt.set(this->loop);
 	this->ashalt.set<Endpoint, &Endpoint::AsyncHalt>(this);
 	this->ashalt.start();
-
-	// Server Code
 
 	this->loop.run(0);
 }
