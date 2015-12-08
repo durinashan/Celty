@@ -13,6 +13,8 @@ get_git_version(GIT_VERSION)
 
 include_directories(include)
 
+option(AFL_BUILD "Builds with the american fuzzy lop shim and runs as a fuzz test" OFF)
+
 set(DAEMON_NAME "celty" CACHE STRING "The name of the daemon")
 set(DEFAULT_RUNAS "nobody" CACHE STRING "The default user to run as")
 set(DEFAULT_LOCKFILE "${DAEMON_NAME}.lwk" CACHE STRING "The default PID lockfile name")
@@ -39,10 +41,16 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -O3 -Wall -Wextra -Wpedantic -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-overflow=1 -Wformat=2 -Wuninitialized -Werror=return-type  -Werror=shadow -fstack-protector -Wformat-security")
 
+if(AFL_BUILD)
+	find_package(AFL REQUIRED)
+	include (CMakeForceCompiler)
+	add_definitions(-DAFL_SHIM)
+	CMAKE_FORCE_C_COMPILER(${AFL_GCC} AflGCC)
+	CMAKE_FORCE_CXX_COMPILER(${AFL_GPP} AflGPP)
+endif()
 
 file(GLOB SOURCES "./*.cc")
 
+
 add_executable(celty ${SOURCES})
-
-
 target_link_libraries(celty dl ev)
