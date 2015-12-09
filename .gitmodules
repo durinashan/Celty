@@ -1,3 +1,6 @@
 [submodule "third_party/catch"]
 	path = third_party/catch
 	url = https://github.com/philsquared/Catch.git
+[submodule "docs/bittorrent.org"]
+	path = docs/bittorrent.org
+	url = https://github.com/bittorrent/bittorrent.org.git
