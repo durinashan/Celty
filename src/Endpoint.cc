@@ -55,6 +55,7 @@ void Endpoint::EVIORead(ev::io& watcher, int revent) {
 void Endpoint::AsyncHalt(void) {
 	this->ashalt.stop();
 	this->timer.stop();
+	this->eio.stop();
 	this->loop.break_loop(ev::ALL);
 }
 }
