@@ -21,10 +21,11 @@ Endpoint::~Endpoint(void) {}
 
 void Endpoint::Runner(void) {
 	// Setup socket
-
-	this->timer.set(this->loop);
-	this->timer.set<Endpoint, &Endpoint::Timeout>(this);
-	this->timer.start(4, 4);
+	if(this->_type != UDP) {
+		this->timer.set(this->loop);
+		this->timer.set<Endpoint, &Endpoint::Timeout>(this);
+		this->timer.start(4, 4);
+	}
 
 	this->eio.set(this->loop);
 	this->eio.set<Endpoint, &Endpoint::EVIORead>(this);
@@ -45,7 +46,7 @@ void Endpoint::Halt(void) {
 }
 
 void Endpoint::Timeout(void) {
-	// Disconnect code
+	// Disconnect code (Only triggered if non UDP)
 }
 
 void Endpoint::EVIORead(ev::io& watcher, int revent) {
@@ -54,7 +55,9 @@ void Endpoint::EVIORead(ev::io& watcher, int revent) {
 
 void Endpoint::AsyncHalt(void) {
 	this->ashalt.stop();
-	this->timer.stop();
+	if(this->_type != UDP) {
+		this->timer.stop();
+	}
 	this->eio.stop();
 	this->loop.break_loop(ev::ALL);
 }
