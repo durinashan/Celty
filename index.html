@@ -29,7 +29,8 @@
     <div class="container">
       <section id="main_content">
         <h1>
-<a id="celty" class="anchor" href="#celty" aria-hidden="true"><span class="octicon octicon-link"></span></a>Celty</h1>
+<a id="celty-" class="anchor" href="#celty-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Celty <a href="https://travis-ci.org/XAMPP/Celty"><img src="https://travis-ci.org/XAMPP/Celty.svg?branch=master" alt="Build Status"></a>
+</h1>
 
 <p>Dead simple, extensible, unix BitTorrent tracker.</p>
 
@@ -43,7 +44,7 @@
 <h2>
 <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
 
-<p>The only thing you need is a fairly modern C++ compiler, CMake for building, and libev for the event loop.</p>
+<p>The only thing you need is a fairly modern C++ compiler (clang &gt;= 3.6 or GCC &gt;= 5.1), CMake for building, and libev for the event loop.</p>
 
 <h2>
 <a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
@@ -55,10 +56,24 @@ $ mkdir celty-build
 $ cd !$
 cd celty-build
 $ cmake ../celty
-$ make
+$ make &amp;&amp; sudo make install
+</code></pre>
+
+<p>That will build and install celty to your system, if you want to remove it, then you can do the following:</p>
+
+<pre><code>$ cd celty-build
+$ sudo make uninstall
 </code></pre>
 
 <p>For the most part the default options will be fine, but if you want to change anything, here is a list of available build options.</p>
+
+<h5>
+<a id="cmake_install_prefix" class="anchor" href="#cmake_install_prefix" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>CMAKE_INSTALL_PREFIX</code>
+</h5>
+
+<pre><code>type: path
+default "/usr/local"
+</code></pre>
 
 <h5>
 <a id="daemon_name" class="anchor" href="#daemon_name" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DAEMON_NAME</code>
@@ -95,7 +110,7 @@ default: "celty.lwk"
 </h5>
 
 <pre><code>type: string
-default: "./"
+default: "$(CMAKE_INSTALL_PREFIX)/lib/celty"
 </code></pre>
 
 <p>The location where celty looks for modules.</p>
@@ -122,7 +137,11 @@ default: ".moe"
 default: yes
 </code></pre>
 
-<p>Builds the modules along with Celty</p>
+<p>Builds the modules along with Celty.</p>
+
+<p><strong>NOTE:</strong> Each module should have a <code>BUILD_*NAME*_MODULE</code> that allows you to control each module being built.</p>
+
+<p><strong>NOTE:</strong> Some modules might have explicit dependencies and will fail to build, check each modules readme for a list of dependencies.</p>
 
 <h5>
 <a id="default_runas" class="anchor" href="#default_runas" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_RUNAS</code>
@@ -149,7 +168,7 @@ default: "/"
 </h5>
 
 <pre><code>type: path
-default: "/etc"
+default: "$(CMAKE_INSTALL_PREFIX)/etc"
 </code></pre>
 
 <p>The default directory that Celty will look for configuration files in.</p>
