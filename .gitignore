@@ -44,3 +44,4 @@
 *.lwk
 callgrind.out.*
 cachegrind.out.*
+cmake_uninstall.cmake

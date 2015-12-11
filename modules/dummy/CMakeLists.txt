@@ -20,4 +20,7 @@ if(BUILD_DUMMY_MODULE)
 	add_library(dummy SHARED ${SOURCES})
 	set_target_properties(dummy PROPERTIES PREFIX "")
 	set_target_properties(dummy PROPERTIES SUFFIX ${DEFAULT_MODULEEXT})
+
+	install(TARGETS dummy DESTINATION ${DEFAULT_MODULEDIR})
+
 endif()

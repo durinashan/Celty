@@ -26,6 +26,8 @@ if(BUILD_SWARM_MODULE)
 		target_link_libraries(swarm ${LIBMEMCACHED_LIBRARY})
 		set_target_properties(swarm PROPERTIES PREFIX "")
 		set_target_properties(swarm PROPERTIES SUFFIX ${DEFAULT_MODULEEXT})
+
+		install(TARGETS swarm DESTINATION ${DEFAULT_MODULEDIR})
 	else()
 		message(FATAL_ERROR "Unable to find libmemcached")
 	endif()

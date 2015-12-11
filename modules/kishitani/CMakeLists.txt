@@ -26,6 +26,8 @@ if(BUILD_KISHITANI_MODULE)
 		target_link_libraries(kishitani ${PQXX_LIBRARIES})
 		set_target_properties(kishitani PROPERTIES PREFIX "")
 		set_target_properties(kishitani PROPERTIES SUFFIX ${DEFAULT_MODULEEXT})
+
+		install(TARGETS kishitani DESTINATION ${DEFAULT_MODULEDIR})
 	else()
 		message(FATAL_ERROR "Unable to find libpqxx, can't build kishitani connector")
 	endif()

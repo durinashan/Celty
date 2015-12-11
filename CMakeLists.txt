@@ -38,3 +38,5 @@ if(BUILD_MODULES)
 	add_subdirectory(modules)
 endif()
 
+configure_file("${PROJECT_ETC_DIR}/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
+add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

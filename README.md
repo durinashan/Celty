@@ -23,6 +23,10 @@ $ make
 
 For the most part the default options will be fine, but if you want to change anything, here is a list of available build options.
 
+##### `CMAKE_INSTALL_PREFIX`
+	type: path
+	default "/usr/local"
+
 ##### `DAEMON_NAME`
 	type: string
 	default: "celty"
@@ -43,7 +47,7 @@ The name of the lock file to use
 
 ##### `DEFAULT_MODULEDIR`
 	type: string
-	default: "./"
+	default: "$(CMAKE_INSTALL_PREFIX)/lib/celty"
 
 The location where celty looks for modules.
 
@@ -81,7 +85,7 @@ The working directory to use when running as a daemon.
 
 ##### `CONFIG_DIRECTORY`
 	type: path
-	default: "/etc"
+	default: "$(CMAKE_INSTALL_PREFIX)/etc"
 
 The default directory that Celty will look for configuration files in.
 
