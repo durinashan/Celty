@@ -18,7 +18,13 @@ $ mkdir celty-build
 $ cd !$
 cd celty-build
 $ cmake ../celty
-$ make
+$ make && sudo make install
+```
+
+That will build and install celty to your system, if you want to remove it, then you can do the following:
+```
+$ cd celty-build
+$ sudo make uninstall
 ```
 
 For the most part the default options will be fine, but if you want to change anything, here is a list of available build options.
