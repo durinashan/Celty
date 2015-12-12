@@ -10,6 +10,8 @@ From what I have experienced, all the other trackers, like [Chihaya](https://git
 The only thing you need is a fairly modern C++ compiler (clang >= 3.6 or GCC >= 5.1), CMake for building, and libev for the event loop.
 
 ## Building
+**ATTN:** Read [Quick Start](https://github.com/XAMPP/Celty/blob/master/docs/QUICKSTART.md) to get up and running ASAP.
+
 To build Celty, create the build directory, and run cmake from that. e.g:
 
 ```

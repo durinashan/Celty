@@ -9,6 +9,10 @@ include(GetGitVersion)
 find_package(LibEV REQUIRED)
 find_package(Threads REQUIRED)
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+	include(systemd)
+endif()
+
 get_git_version(GIT_VERSION)
 
 include_directories(include)
@@ -51,7 +55,6 @@ endif()
 
 file(GLOB SOURCES "./*.cc")
 
-
 add_executable(celty ${SOURCES})
 target_link_libraries(celty dl ev)
 
@@ -59,4 +62,16 @@ install(TARGETS celty DESTINATION bin)
 
 install(FILES "${PROJECT_ETC_DIR}/celty.cfg" DESTINATION etc/celty)
 install(FILES "${PROJECT_ETC_DIR}/client.def" DESTINATION etc/celty)
+install(FILES "${PROJECT_ETC_DIR}/celty-proxy.conf" DESTINATION etc/celty)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+	install(FILES "${PROJECT_ETC_DIR}/celty.rc.freebsd" DESTINATION /etc/rc.d/ RENAME celty)
+endif()
+
+if(SYSTEMD_FOUND)
+	install(FILES "${PROJECT_ETC_DIR}/celty.service" DESTINATION ${SYSTEMD_SERVICES_INSTALL_DIR})
+endif()
+
+install(FILES "${PROJECT_DOC_DIR}/celty.1" DESTINATION man/man1)
+
 

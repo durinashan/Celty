@@ -1,0 +1,13 @@
+[Unit]
+Description=Celty BitTorrent Tracker
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/tmp/celty.pid
+ExecStart=/usr/local/bin/celty
+ExecReload=/usr/local/bin/celty -s reload
+ExecStop=/usr/local/bin/celty -s halt
+
+[Install]
+WantedBy=multi-user.target

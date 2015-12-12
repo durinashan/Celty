@@ -130,6 +130,8 @@ int main(int argc, char *argv[]) {
 		workers = ((workers = std::stoi(cfg->ActiveConfig["Workers"])) == 0) ? sysconf(_SC_NPROCESSORS_ONLN) : workers;
 	}
 
+	if(cfg->SettingEnabled(""))
+
 	if (_daemonize)
 		syslog(LOG_INFO, "Starting %d worker(s)", workers);
 	else

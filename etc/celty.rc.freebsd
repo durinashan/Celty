@@ -1,0 +1,18 @@
+#!/bin/sh
+# FreeBSD Celty Daemon script
+. /etc/rc.subr
+
+name=celty
+rcvar=celty_enabled
+
+command="/usr/local/bin/celty"
+command_args="> /dev/null 2>&1
+
+pidfile="/tmp/celty.pid"
+
+required_files="/usr/local/etc/${name}/${name}.conf"
+
+sig_reload="HUP"
+
+load_rc_config $name
+run_rc_command "$1"
