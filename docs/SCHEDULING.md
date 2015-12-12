@@ -1,7 +1,7 @@
 # Celty Scheduling Modes
 This document describes the general idea and motivation behind each of the scheduling algorithms.
 
-## First-Come-First-Server (FCFS)
+## First-Come-First-Serve (FCFS)
 The `FirstCome` setting for the scheduler is simple, requests are queued up and serviced in the order they are received. 
 
 For example:

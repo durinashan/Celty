@@ -31,83 +31,28 @@ $ sudo make uninstall
 
 For the most part the default options will be fine, but if you want to change anything, here is a list of available build options.
 
-##### `CMAKE_INSTALL_PREFIX`
-	type: path
-	default "/usr/local"
-
-##### `DAEMON_NAME`
-	type: string
-	default: "celty"
-
-The name of the daemon, it will be used on all the logs and other messages
-
-##### `DEFAULT_LOCKDIR`
-	type: path
-	default: "/var/lock/subsys"
-
-The location of the lock file for the daemonized process
-
-##### `DEFAULT_LOCKFILE`
-	type: string
-	default: "celty.lwk"
-
-The name of the lock file to use
-
-##### `DEFAULT_MODULEDIR`
-	type: string
-	default: "$(CMAKE_INSTALL_PREFIX)/lib/celty"
-
-The location where celty looks for modules.
-
-##### `DEFAULT_MODULEEXT`
-	type: string
-	default: ".moe"
-
-The extension of the module to load.
+|         Option         |   Default    |          Description               |
+|------------------------|--------------|------------------------------------|
+| `CMAKE_INSTALL_PREFIX` | `/usr/local` | This is the install path for celty |
+| `DAEMON_NAME`          | `celty`      | The name of the daemon, it will be used on all the logs and other messages |
+| `DEFAULT_LOCKDIR`      | `/var/lock/subsys` | The location of the lock file for the daemonized process |
+| `DEFAULT_LOCKFILE`     | `celty.lwk`  | The name of the lock file to use |
+| `DEFAULT_MODULEDIR`    | `$(CMAKE_INSTALL_PREFIX)/lib/celty` | The location where celty looks for modules. |
+| `DEFAULT_MODULEEXT`    | `.moe`       | The extension of the module to load. 
+| `BUILD_MODULES`        | `yes`        | Builds the modules along with Celty.|
+| `DEFAULT_RUNAS`        | `nobody`     | The user to run the daemon as. |
+| `DEFAULT_WORKINGDIR`   | `/`          | The working directory to use when running as a daemon. |
+| `CONFIG_DIRECTORY`     | `$(CMAKE_INSTALL_PREFIX)/etc` | The default directory that Celty will look for configuration files in. |
+| `CONFIG_FILE`          | `celty.cfg`   | The default name of the configuration file that Celty will look for. |
+| `PID_FILE`             | `/tmp/celty.pid` | The location the Celty daemon writes a PID file for signaling. |
 
 **NOTE:** The `.` in the extension name is optional, in that case Celty will look for any filed that is suffixed with a matching string.
 
 **NOTE:** The any module following the standard build method in the `[modules](./modules)` directory will automatically be built with the given extension.
 
-##### `BUILD_MODULES`
-	type: boolean
-	default: yes
-
-Builds the modules along with Celty.
-
 **NOTE:** Each module should have a `BUILD_*NAME*_MODULE` that allows you to control each module being built.
 
 **NOTE:** Some modules might have explicit dependencies and will fail to build, check each modules readme for a list of dependencies.
-
-##### `DEFAULT_RUNAS`
-	type: string
-	default "nobody"
-
-The user to run the daemon as.
-
-##### `DEFAULT_WORKINGDIR`
-	type: string
-	default: "/"
-
-The working directory to use when running as a daemon.
-
-##### `CONFIG_DIRECTORY`
-	type: path
-	default: "$(CMAKE_INSTALL_PREFIX)/etc"
-
-The default directory that Celty will look for configuration files in.
-
-##### `CONFIG_FILE`
-	type: string
-	default: "celty.cfg"
-
-The default name of the configuration file that Celty will look for.
-
-##### `PID_FILE`
-	type: string
-	default: "/tmp/celty.pid"
-
-The location the Celty daemon writes a PID file for signaling.
 
 ## Running
 To run Celty, just run the build executable, it should fork of to a headless process as a daemon, or you can prevent it from daemonizing by passing the `--keep-head` option

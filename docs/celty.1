@@ -165,3 +165,42 @@ The connector to use to manage the whitelist.
 The number of worker threads to start up. Set to 0 for one worker per CPU core.
 
 .SH Scheduler
+The \fBcelty\fP connection scheduler has five modes, \fBFavorSeed\fP, \fBFavorLeach\fP, \fBRoundRobbin\fP, \fBBestRatio\fP, and \fBFirstCome\fP.
+
+.SS FavorSeed
+This method uses the formula f = log2(1+S)/(sigma(log2(1+Si))) to calculate the favor of the client. Where S is the Seed amount in megabytes, and Si is the same but for all clients.
+.TP
+For example:
+.TP
+There is a 1MB file, client \fIA\fP seeded 2MB, client \fIB\fP seeded 6MB, and client \fIC\fP seeded 1MB. The following favor is calculated for each client.
+.TP
+\fIAf\fP = log2(1+2)/(log2(1+2)+log2(1+6)+log2(1+1)) ~= 29%
+.TP
+\fIBf\fP = log2(1+6)/(log2(1+2)+log2(1+6)+log2(1+1)) ~= 52%
+.TP
+\fICf\fP = log2(1+1)/(log2(1+2)+log2(1+6)+log2(1+1)) ~= 18%
+.TP
+Thus client \fIB\fP is favored more often than either of the others.
+
+
+.SS FavorLeach
+This is the same as but rather than calculating favor based on the Seed amount, the clients Leach is used.
+
+
+.SS RoundRobbin
+Round Robbin services each client once at minimum, a collective list of clients is built to track each of the clients that connect to the tracker for a set amount and then iterates through the list to see if the client as a request to service. This ensures that all clients get the same amount of time but is substantially slower and is outperformed by One of the Favor methods.
+.TP
+For Example:
+.TP
+There are 3 clients \fIA\fP, \fIB\fP, and \fIC\fP, once \fBcelty\fP has been made aware of them, each client will be serviced right after the other, even if there is no request from the client, so first \fIA\fP, then \fIB\fP, and \fIC\fP, followed by \fIA\fP again.
+
+
+.SS BestRatio
+This method calculates the ratio for each client and sorts the response order as such.
+
+.SS FirstCome
+This setting for the scheduler is simple, requests are queued up and serviced in the order they are received.
+.TP
+For example:
+.TP
+Client \fIA\fP sends a request, followed by client \fIB\fP and \fIC\fP, however \fIB\fP sends 2 requests before \fIC\fP can send a request, client \fIB\fP will then be serviced twice, prior to \fIC\fP.
