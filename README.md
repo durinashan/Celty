@@ -1,7 +1,7 @@
 # Celty [![Build Status](https://travis-ci.org/XAMPP/Celty.svg?branch=master)](https://travis-ci.org/XAMPP/Celty)
 Dead simple, extensible, unix BitTorrent tracker.
 
-**NOTICE:** This project is still in development, it's not quite working yet.
+:warning: This project is still in development, it's not quite working yet. :warning:
 
 ## Why Celty when there is `X`?
 From what I have experienced, all the other trackers, like [Chihaya](https://github.com/chihaya/chihaya) or [Ocelot](https://github.com/WhatCD/Ocelot) all have a plethora of dependencies, strange configuration, or just general lack of useful documentation. The attempt that Celty makes is to make this process dead simple. Celty is mostly self contained, and will work right out of the box.
