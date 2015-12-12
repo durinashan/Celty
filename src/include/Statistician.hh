@@ -4,6 +4,7 @@
 #pragma once
 #include <mutex>
 #include <memory>
+#include <string>
 namespace Celty {
 class Statistician {
 	private:
@@ -16,5 +17,7 @@ class Statistician {
 	~Statistician(void);
 
 	static std::shared_ptr<Statistician> &GetInstance(void);
+
+	void LoadClientList(std::string list);
 };
 }

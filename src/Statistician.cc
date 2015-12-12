@@ -18,4 +18,7 @@ std::shared_ptr<Statistician> &Statistician::GetInstance(void) {
 Statistician::Statistician(void) {}
 
 Statistician::~Statistician(void) {}
+
+void Statistician::LoadClientList(std::string list) {}
 }
+

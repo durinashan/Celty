@@ -43,15 +43,17 @@ int main(int argc, char *argv[]) {
 	int c;
 	std::string cfgfile = CONFIG_FILE;
 	std::string modfolder = DEFAULT_MODULEDIR;
+	std::string clientlist = CLIENT_LIST;
 	while (true) {
 		static struct option long_opts[] = {{"keep-head", no_argument, &_daemonize, 0},
 											{"sig", required_argument, 0, 's'},
 											{"cfg", required_argument, 0, 'c'},
+											{"cl",  required_argument, 0, 'l'},
 											{"module-dir", required_argument, 0, 'm'},
 											{"help", no_argument, 0, 'h'},
 											{0, 0, 0, 0}};
 		int opt_index = 0;
-		c = getopt_long(argc, argv, "s:c:m:h", long_opts, &opt_index);
+		c = getopt_long(argc, argv, "s:c:l:m:h", long_opts, &opt_index);
 		if (c == -1)
 			break;
 		switch (c) {
@@ -67,6 +69,11 @@ int main(int argc, char *argv[]) {
 			case 'c': {
 				if (optarg)
 					cfgfile = optarg;
+				break;
+			}
+			case 'l': {
+				if(optarg)
+					clientlist = optarg;
 				break;
 			}
 			case 'm': {
@@ -130,7 +137,8 @@ int main(int argc, char *argv[]) {
 		workers = ((workers = std::stoi(cfg->ActiveConfig["Workers"])) == 0) ? sysconf(_SC_NPROCESSORS_ONLN) : workers;
 	}
 
-	if(cfg->SettingEnabled(""))
+	if(cfg->SettingEnabled("StatisticsEnable"))
+		stats->LoadClientList(clientlist);
 
 	if (_daemonize)
 		syslog(LOG_INFO, "Starting %d worker(s)", workers);
