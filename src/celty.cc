@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 		static struct option long_opts[] = {{"keep-head", no_argument, &_daemonize, 0},
 											{"sig", required_argument, 0, 's'},
 											{"cfg", required_argument, 0, 'c'},
-											{"cl",  required_argument, 0, 'l'},
+											{"cl", required_argument, 0, 'l'},
 											{"module-dir", required_argument, 0, 'm'},
 											{"help", no_argument, 0, 'h'},
 											{0, 0, 0, 0}};
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 			case 'l': {
-				if(optarg)
+				if (optarg)
 					clientlist = optarg;
 				break;
 			}
@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
 		workers = ((workers = std::stoi(cfg->ActiveConfig["Workers"])) == 0) ? sysconf(_SC_NPROCESSORS_ONLN) : workers;
 	}
 
-	if(cfg->SettingEnabled("StatisticsEnable"))
+	if (cfg->SettingEnabled("StatisticsEnable"))
 		stats->LoadClientList(clientlist);
 
 	if (_daemonize)

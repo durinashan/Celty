@@ -2,6 +2,7 @@
 	An Endpoint that can be set into UDP or HTTP mode
 */
 #include <Endpoint.hh>
+#include <HTTP.hh>
 
 #include <unistd.h>
 #include <fcntl.h>
