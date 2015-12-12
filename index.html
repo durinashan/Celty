@@ -34,7 +34,7 @@
 
 <p>Dead simple, extensible, unix BitTorrent tracker.</p>
 
-<p><strong>NOTICE:</strong> This project is still in development, it's not quite working yet.</p>
+<p><img class="emoji" title=":warning:" alt=":warning:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/26a0.png" height="20" width="20" align="absmiddle"> This project is still in development, it's not quite working yet. <img class="emoji" title=":warning:" alt=":warning:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/26a0.png" height="20" width="20" align="absmiddle"></p>
 
 <h2>
 <a id="why-celty-when-there-is-x" class="anchor" href="#why-celty-when-there-is-x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Celty when there is <code>X</code>?</h2>
@@ -48,6 +48,8 @@
 
 <h2>
 <a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
+
+<p><strong>ATTN:</strong> Read <a href="https://github.com/XAMPP/Celty/blob/master/docs/QUICKSTART.md">Quick Start</a> to get up and running ASAP.</p>
 
 <p>To build Celty, create the build directory, and run cmake from that. e.g:</p>
 
@@ -67,131 +69,85 @@ $ sudo make uninstall
 
 <p>For the most part the default options will be fine, but if you want to change anything, here is a list of available build options.</p>
 
-<h5>
-<a id="cmake_install_prefix" class="anchor" href="#cmake_install_prefix" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>CMAKE_INSTALL_PREFIX</code>
-</h5>
-
-<pre><code>type: path
-default "/usr/local"
-</code></pre>
-
-<h5>
-<a id="daemon_name" class="anchor" href="#daemon_name" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DAEMON_NAME</code>
-</h5>
-
-<pre><code>type: string
-default: "celty"
-</code></pre>
-
-<p>The name of the daemon, it will be used on all the logs and other messages</p>
-
-<h5>
-<a id="default_lockdir" class="anchor" href="#default_lockdir" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_LOCKDIR</code>
-</h5>
-
-<pre><code>type: path
-default: "/var/lock/subsys"
-</code></pre>
-
-<p>The location of the lock file for the daemonized process</p>
-
-<h5>
-<a id="default_lockfile" class="anchor" href="#default_lockfile" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_LOCKFILE</code>
-</h5>
-
-<pre><code>type: string
-default: "celty.lwk"
-</code></pre>
-
-<p>The name of the lock file to use</p>
-
-<h5>
-<a id="default_moduledir" class="anchor" href="#default_moduledir" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_MODULEDIR</code>
-</h5>
-
-<pre><code>type: string
-default: "$(CMAKE_INSTALL_PREFIX)/lib/celty"
-</code></pre>
-
-<p>The location where celty looks for modules.</p>
-
-<h5>
-<a id="default_moduleext" class="anchor" href="#default_moduleext" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_MODULEEXT</code>
-</h5>
-
-<pre><code>type: string
-default: ".moe"
-</code></pre>
-
-<p>The extension of the module to load.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CMAKE_INSTALL_PREFIX</code></td>
+<td><code>/usr/local</code></td>
+<td>This is the install path for celty</td>
+</tr>
+<tr>
+<td><code>DAEMON_NAME</code></td>
+<td><code>celty</code></td>
+<td>The name of the daemon, it will be used on all the logs and other messages</td>
+</tr>
+<tr>
+<td><code>DEFAULT_LOCKDIR</code></td>
+<td><code>/var/lock/subsys</code></td>
+<td>The location of the lock file for the daemonized process</td>
+</tr>
+<tr>
+<td><code>DEFAULT_LOCKFILE</code></td>
+<td><code>celty.lwk</code></td>
+<td>The name of the lock file to use</td>
+</tr>
+<tr>
+<td><code>DEFAULT_MODULEDIR</code></td>
+<td><code>$(CMAKE_INSTALL_PREFIX)/lib/celty</code></td>
+<td>The location where celty looks for modules.</td>
+</tr>
+<tr>
+<td><code>DEFAULT_MODULEEXT</code></td>
+<td><code>.moe</code></td>
+<td>The extension of the module to load.</td>
+</tr>
+<tr>
+<td><code>BUILD_MODULES</code></td>
+<td><code>yes</code></td>
+<td>Builds the modules along with Celty.</td>
+</tr>
+<tr>
+<td><code>DEFAULT_RUNAS</code></td>
+<td><code>nobody</code></td>
+<td>The user to run the daemon as.</td>
+</tr>
+<tr>
+<td><code>DEFAULT_WORKINGDIR</code></td>
+<td><code>/</code></td>
+<td>The working directory to use when running as a daemon.</td>
+</tr>
+<tr>
+<td><code>CONFIG_DIRECTORY</code></td>
+<td><code>$(CMAKE_INSTALL_PREFIX)/etc</code></td>
+<td>The default directory that Celty will look for configuration files in.</td>
+</tr>
+<tr>
+<td><code>CONFIG_FILE</code></td>
+<td><code>celty.cfg</code></td>
+<td>The default name of the configuration file that Celty will look for.</td>
+</tr>
+<tr>
+<td><code>PID_FILE</code></td>
+<td><code>/tmp/celty.pid</code></td>
+<td>The location the Celty daemon writes a PID file for signaling.</td>
+</tr>
+</tbody>
+</table>
 
 <p><strong>NOTE:</strong> The <code>.</code> in the extension name is optional, in that case Celty will look for any filed that is suffixed with a matching string.</p>
 
 <p><strong>NOTE:</strong> The any module following the standard build method in the <code>[modules](./modules)</code> directory will automatically be built with the given extension.</p>
 
-<h5>
-<a id="build_modules" class="anchor" href="#build_modules" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>BUILD_MODULES</code>
-</h5>
-
-<pre><code>type: boolean
-default: yes
-</code></pre>
-
-<p>Builds the modules along with Celty.</p>
-
 <p><strong>NOTE:</strong> Each module should have a <code>BUILD_*NAME*_MODULE</code> that allows you to control each module being built.</p>
 
 <p><strong>NOTE:</strong> Some modules might have explicit dependencies and will fail to build, check each modules readme for a list of dependencies.</p>
-
-<h5>
-<a id="default_runas" class="anchor" href="#default_runas" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_RUNAS</code>
-</h5>
-
-<pre><code>type: string
-default "nobody"
-</code></pre>
-
-<p>The user to run the daemon as.</p>
-
-<h5>
-<a id="default_workingdir" class="anchor" href="#default_workingdir" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>DEFAULT_WORKINGDIR</code>
-</h5>
-
-<pre><code>type: string
-default: "/"
-</code></pre>
-
-<p>The working directory to use when running as a daemon.</p>
-
-<h5>
-<a id="config_directory" class="anchor" href="#config_directory" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>CONFIG_DIRECTORY</code>
-</h5>
-
-<pre><code>type: path
-default: "$(CMAKE_INSTALL_PREFIX)/etc"
-</code></pre>
-
-<p>The default directory that Celty will look for configuration files in.</p>
-
-<h5>
-<a id="config_file" class="anchor" href="#config_file" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>CONFIG_FILE</code>
-</h5>
-
-<pre><code>type: string
-default: "celty.cfg"
-</code></pre>
-
-<p>The default name of the configuration file that Celty will look for.</p>
-
-<h5>
-<a id="pid_file" class="anchor" href="#pid_file" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>PID_FILE</code>
-</h5>
-
-<pre><code>type: string
-default: "/tmp/celty.pid"
-</code></pre>
-
-<p>The location the Celty daemon writes a PID file for signaling.</p>
 
 <h2>
 <a id="running" class="anchor" href="#running" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running</h2>
