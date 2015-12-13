@@ -164,8 +164,10 @@ int main(int argc, char *argv[]) {
 	if (cfg->SettingEnabled("UDPEndpoint")) {
 		std::string port = (cfg->SettingEnabled("UDPPort")) ? cfg->ActiveConfig["UDPPort"] : "6881";
 		std::string host = (cfg->SettingEnabled("UDPListen")) ? cfg->ActiveConfig["UDPListen"] : "0.0.0.0";
+
 		for (int udpe = 0; udpe < workers; ++udpe) {
-			Endpoint *e = new Endpoint(Endpoint::UDP, host, port);
+			/* UDP has no Max connection limit, because well UDP */
+			Endpoint *e = new Endpoint(Endpoint::UDP, host, port, 0);
 			e->Start();
 			endpoints.push_back(e);
 		}
@@ -174,8 +176,9 @@ int main(int argc, char *argv[]) {
 	if (cfg->SettingEnabled("HTTPEndpoint")) {
 		std::string port = (cfg->SettingEnabled("HTTPPort")) ? cfg->ActiveConfig["HTTPPort"] : "6881";
 		std::string host = (cfg->SettingEnabled("HTTPListen")) ? cfg->ActiveConfig["HTTPListen"] : "0.0.0.0";
+		int maxc = (cfg->SettingEnabled("HTTPMaxConnections") ? std::stoi(cfg->ActiveConfig["HTTPMaxConnections"]) : 0);
 		for (int httpe = 0; httpe < workers; ++httpe) {
-			Endpoint *e = new Endpoint(Endpoint::HTTP, host, port);
+			Endpoint *e = new Endpoint(Endpoint::HTTP, host, port, maxc);
 			e->Start();
 			endpoints.push_back(e);
 		}
@@ -186,7 +189,8 @@ int main(int argc, char *argv[]) {
 			syslog(LOG_INFO, "Starting API Endpoint");
 		else
 			std::cout << "[@] Starting API Endpoint" << std::endl;
-		Endpoint *eapi = new Endpoint(Endpoint::API, cfg->ActiveConfig["APIListen"], cfg->ActiveConfig["APIPort"]);
+		int maxc = (cfg->SettingEnabled("APIMaxConnections") ? std::stoi(cfg->ActiveConfig["APIMaxConnections"]) : 0);
+		Endpoint *eapi = new Endpoint(Endpoint::API, cfg->ActiveConfig["APIListen"], cfg->ActiveConfig["APIPort"], maxc);
 		eapi->Start();
 		endpoints.push_back(eapi);
 	}

@@ -16,6 +16,9 @@ Enables the Celty API endpoint.
 ##### APIListen
 	default: 0.0.0.0
 The address to listen on for API requests.
+##### APIMaxConnections
+	default: 0
+The maximum number of concurrent API connections.
 ##### APIPort
 	default: 2600
 The port to listen on for API requests.

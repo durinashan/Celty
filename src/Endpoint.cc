@@ -15,14 +15,14 @@
 #include <iostream>
 
 namespace Celty {
-Endpoint::Endpoint(EndpointType type, std::string listen_addr, std::string listen_port)
-	: _type(type), loop(ev::AUTO), listen(listen_addr), port(listen_port) {}
+Endpoint::Endpoint(EndpointType type, std::string listen_addr, std::string listen_port, int max_connections)
+	: _type(type), loop(ev::AUTO), listen(listen_addr), port(listen_port), maxconn(max_connections) {}
 
 Endpoint::~Endpoint(void) {}
 
 void Endpoint::Runner(void) {
 	// Setup socket
-	if(this->_type != UDP) {
+	if (this->_type != UDP) {
 		this->timer.set(this->loop);
 		this->timer.set<Endpoint, &Endpoint::Timeout>(this);
 		this->timer.start(4, 4);
@@ -50,13 +50,11 @@ void Endpoint::Timeout(void) {
 	// Disconnect code (Only triggered if non UDP)
 }
 
-void Endpoint::EVIORead(ev::io& watcher, int revent) {
-
-}
+void Endpoint::EVIORead(ev::io &watcher, int revent) {}
 
 void Endpoint::AsyncHalt(void) {
 	this->ashalt.stop();
-	if(this->_type != UDP) {
+	if (this->_type != UDP) {
 		this->timer.stop();
 	}
 	this->eio.stop();

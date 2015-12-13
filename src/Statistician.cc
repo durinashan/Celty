@@ -21,4 +21,3 @@ Statistician::~Statistician(void) {}
 
 void Statistician::LoadClientList(std::string list) {}
 }
-

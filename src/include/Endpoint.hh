@@ -27,6 +27,7 @@ class Endpoint {
 	std::thread t;
 	std::string listen;
 	std::string port;
+	int maxconn;
 
 	void Runner(void);
 	void Timeout(void);
@@ -35,7 +36,7 @@ class Endpoint {
 	void EVIORead(ev::io &watcher, int revent);
 
 	public:
-	Endpoint(EndpointType type, std::string listen_addr, std::string listen_port);
+	Endpoint(EndpointType type, std::string listen_addr, std::string listen_port, int max_connections);
 	~Endpoint(void);
 
 	void Start(void);
