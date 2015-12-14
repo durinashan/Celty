@@ -34,6 +34,8 @@ static void sighndl(int sid);
 static void daemonize(const char *lockfile);
 static void dispatch(const char *signame);
 
+void print_help(void);
+
 static int lockfp = 0;
 static int _daemonize = 1;
 
@@ -82,6 +84,7 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 			case 'h': {
+				print_help();
 				exit(0);
 			}
 			case '?': {
@@ -131,7 +134,7 @@ int main(int argc, char *argv[]) {
 	else
 		std::cout << "[@] Loaded " << modl->GetLoadedModuleCount() << " module(s)" << std::endl;
 	int workers;
-	if (cfg->SettingEnabled("Workers")) {
+	if (!cfg->SettingEnabled("Workers")) {
 		workers = sysconf(_SC_NPROCESSORS_ONLN);
 	} else {
 		workers = ((workers = std::stoi(cfg->ActiveConfig["Workers"])) == 0) ? sysconf(_SC_NPROCESSORS_ONLN) : workers;
@@ -190,7 +193,8 @@ int main(int argc, char *argv[]) {
 		else
 			std::cout << "[@] Starting API Endpoint" << std::endl;
 		int maxc = (cfg->SettingEnabled("APIMaxConnections") ? std::stoi(cfg->ActiveConfig["APIMaxConnections"]) : 0);
-		Endpoint *eapi = new Endpoint(Endpoint::API, cfg->ActiveConfig["APIListen"], cfg->ActiveConfig["APIPort"], maxc);
+		Endpoint *eapi =
+			new Endpoint(Endpoint::API, cfg->ActiveConfig["APIListen"], cfg->ActiveConfig["APIPort"], maxc);
 		eapi->Start();
 		endpoints.push_back(eapi);
 	}
@@ -388,4 +392,18 @@ static void dispatch(const char *signame) {
 		std::cerr << "Unable to send signal, error code: " << errno << " (" << strerror(errno) << ")" << std::endl;
 		exit(-1);
 	}
+}
+
+void print_help(void) {
+	std::cout << "usage: celty  [  --keep-head  ] [ --cfg FILE ] [ --sig SIGNAL ] [ --module-dir DIRECTORY ]"
+			  << std::endl;
+	std::cout << "\t--keep-head         Prevents Celty from daemonizing" << std::endl;
+	std::cout << "\t--cfg, -c           Override the default configuration file" << std::endl;
+	std::cout << "\t                        (DEFAULT: " << CONFIG_FILE << ")" << std::endl;
+	std::cout << "\t--sig, -s           Send a signal to a running Celty instance" << std::endl;
+	std::cout << "\t                        reload (SIGHUP) - Reload configuration and modules" << std::endl;
+	std::cout << "\t                        halt  (SIGTERM) - Shutdown running instance" << std::endl;
+	std::cout << "\t--module-dir, -m    Override the default module directory" << std::endl;
+	std::cout << "\t                        (DEFAULT: " << DEFAULT_MODULEDIR << ")" << std::endl;
+	std::cout << "\t--help, -h          Display this message" << std::endl;
 }
