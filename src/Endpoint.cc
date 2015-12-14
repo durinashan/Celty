@@ -28,9 +28,9 @@ void Endpoint::Runner(void) {
 		this->timer.start(4, 4);
 	}
 
-	this->eio.set(this->loop);
-	this->eio.set<Endpoint, &Endpoint::EVIORead>(this);
-	this->eio.start(this->sockfd, ev::READ);
+	// this->eio.set(this->loop);
+	// this->eio.set<Endpoint, &Endpoint::EVIORead>(this);
+	// this->eio.start(this->sockfd, ev::READ);
 
 	this->ashalt.set(this->loop);
 	this->ashalt.set<Endpoint, &Endpoint::AsyncHalt>(this);
