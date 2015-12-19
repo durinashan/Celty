@@ -15,7 +15,7 @@ MODULE("Fortune")
 static bool fortune = false;
 
 static char *fortunes[] = {
-	" The problem with America is stupidity. I'm not saying there should be a capital punishment for stupidity, but "
+	"The problem with America is stupidity. I'm not saying there should be a capital punishment for stupidity, but "
 	"why don't we just take the safety labels off of everything and let the problem solve itself?",
 	"I haven't lost my mind; I have a tape back-up somewhere.",
 	"The problem with troubleshooting is that the trouble shoots back.", "I script in C, because fuck you."};
