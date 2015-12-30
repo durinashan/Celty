@@ -3,29 +3,29 @@
 */
 #include <celty-config.hh>
 
+#include <cerrno>
+#include <csignal>
 #include <cstdio>
 #include <cstdlib>
-#include <unistd.h>
 #include <fcntl.h>
-#include <csignal>
-#include <syslog.h>
-#include <cerrno>
 #include <pwd.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <sys/file.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <syslog.h>
+#include <unistd.h>
 
 #include <getopt.h>
 
-#include <iostream>
 #include <chrono>
+#include <iostream>
 #include <vector>
 
 #include <Configuration.hh>
+#include <Endpoint.hh>
 #include <ModuleLoader.hh>
 #include <Statistician.hh>
-#include <Endpoint.hh>
 
 #include <Bencode.hh>
 
@@ -376,9 +376,7 @@ static void dispatch(const char *signame) {
 
 	int sig = SIGTSTP;
 
-	if (strncmp(signame, "status", 6) == 0) {
-		sig = SIGUSR1;
-	} else if (strncmp(signame, "reload", 6) == 0) {
+	if (strncmp(signame, "reload", 6) == 0) {
 		std::cout << "[@] Reloading Configuration" << std::endl;
 		sig = SIGHUP;
 	} else if (strncmp(signame, "halt", 4) == 0) {
@@ -388,9 +386,11 @@ static void dispatch(const char *signame) {
 		std::cerr << "Unknown signal '" << signame << "'" << std::endl;
 	}
 
-	if (kill(pid, sig) < 0) {
-		std::cerr << "Unable to send signal, error code: " << errno << " (" << strerror(errno) << ")" << std::endl;
-		exit(-1);
+	if (sig != SIGTSTP) {
+		if (kill(pid, sig) < 0) {
+			std::cerr << "Unable to send signal, error code: " << errno << " (" << strerror(errno) << ")" << std::endl;
+			exit(-1);
+		}
 	}
 }
 
