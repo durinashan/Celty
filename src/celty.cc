@@ -37,6 +37,7 @@ static void dispatch(const char *signame);
 void print_help(void);
 
 static int lockfp = 0;
+static int lockh = 0;
 static int _daemonize = 1;
 
 using namespace Celty;
@@ -260,6 +261,14 @@ static void daemonize(const char *lockfile) {
 			syslog(LOG_ERR, "Unable to create lock file %s, error code: %d (%s)", lockfile, errno, strerror(errno));
 			exit(-1);
 		}
+		lockh = flock(lockfp, LOCK_EX | LOCK_NB);
+		if(lockh < 0) {
+			std::cerr << "[!] Unable to obtain lock on file " << lockfile << ", error code:" << errno << " ("
+					  << strerror(errno) << ")" << std::endl;
+			syslog(LOG_ERR, "Unable to obtain lock on file %s, error code: %d (%s)", lockfile, errno, strerror(errno));
+			exit(-1);
+		}
+
 	}
 	/* Drop the current user for a new one */
 	if (getuid() == 0 || geteuid() == 0) {
@@ -357,6 +366,12 @@ static void sighndl(int sid) {
 			/* --sig reload */
 			Configuration::GetInstance()->ReloadConfiguration();
 			syslog(LOG_INFO, "Reloaded Configuration");
+			ModuleLoader::GetInstance()->ReloadAll();
+			ModuleLoader::GetInstance()->Foreach([=](Celty::Module *mod) {
+				mod->AnnounceSettings(Configuration::GetInstance()->ActiveConfig);
+				mod->Run();
+			});
+			syslog(LOG_INFO, "Reloaded Modules");
 		}
 		default: {}
 	}

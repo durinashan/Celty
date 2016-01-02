@@ -3,13 +3,13 @@
 */
 #include <iostream>
 
-#include <algorithm>
 #include <ModuleLoader.hh>
+#include <algorithm>
 
-#include <dlfcn.h>
-#include <sys/types.h>
 #include <dirent.h>
+#include <dlfcn.h>
 #include <errno.h>
+#include <sys/types.h>
 
 #include <cstdlib>
 #include <cstring>
@@ -121,15 +121,17 @@ bool ModuleLoader::LoadAll(std::string dir) {
 	std::vector<std::string> files;
 	if (!this->GetDirContents(dir, files))
 		return false;
-	files.erase(std::remove_if(files.begin(), files.end(), [](std::string name) {
-					if (name == ".." || name == ".")
-						return true;
-					if (name.length() < ModuleLoader::ending.length() + 1)
-						return true;
-					return (0 !=
-							name.compare(name.length() - ModuleLoader::ending.length(), ModuleLoader::ending.length(),
-										 ModuleLoader::ending));
-				}), files.end());
+	files.erase(std::remove_if(files.begin(), files.end(),
+							   [](std::string name) {
+								   if (name == ".." || name == ".")
+									   return true;
+								   if (name.length() < ModuleLoader::ending.length() + 1)
+									   return true;
+								   return (0 !=
+										   name.compare(name.length() - ModuleLoader::ending.length(),
+														ModuleLoader::ending.length(), ModuleLoader::ending));
+							   }),
+				files.end());
 	for (auto &module : files) {
 		if (!this->LoadModule(dir + "/" + module))
 			return false;
@@ -144,6 +146,7 @@ bool ModuleLoader::UnloadAll(void) {
 }
 bool ModuleLoader::ReloadAll(void) {
 	for (auto &module : this->LoadedModules) {
+		module.second->modu->Halt();
 		this->ReloadModule(module.first);
 	}
 	return true;
