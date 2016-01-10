@@ -41,4 +41,4 @@ notifications:
     template:
       - "%{repository_slug} (%{branch} @ %{commit}) : %{message} %{result} "
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
