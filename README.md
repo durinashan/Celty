@@ -1,4 +1,4 @@
-# Celty [![Build Status](https://travis-ci.org/XAMPP/Celty.svg?branch=master)](https://travis-ci.org/XAMPP/Celty)
+# Celty [![Build Status](https://travis-ci.org/XAMPP/Celty.svg?branch=master)](https://travis-ci.org/XAMPP/Celty) [![codecov.io](https://codecov.io/github/XAMPP/Celty/coverage.svg?branch=master)](https://codecov.io/github/XAMPP/Celty?branch=master)
 Dead simple, extensible, unix BitTorrent tracker.
 
 :warning: This project is still in development, it's not quite working yet. :warning:

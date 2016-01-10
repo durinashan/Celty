@@ -31,9 +31,9 @@ before_script:
   - cmake ../ -DBUILD_MODULES=OFF
 script:
   - make
-  - ./home/travis/build/XAMPP/Celty/bin/celty -c $(pwd)/../etc/celty.cfg -m $(pwd)
+  - ./../bin/celty -c $(pwd)/../etc/celty.cfg -m $(pwd)
   - sleep 5
-  - ./home/travis/build/XAMPP/Celty/bin/celty -s halt
+  - ./../bin/celty -s halt
 notifications:
   irc:
     channels:
