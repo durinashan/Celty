@@ -22,6 +22,9 @@ Endpoint::~Endpoint(void) {}
 
 void Endpoint::Runner(void) {
 	// Setup socket
+
+
+
 	if (this->_type != UDP) {
 		this->timer.set(this->loop);
 		this->timer.set<Endpoint, &Endpoint::Timeout>(this);

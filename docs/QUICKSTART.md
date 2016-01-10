@@ -41,6 +41,10 @@ $ make && sudo make install
 Other than that, you're done!
 
 ## Done~
+by default, Celty expects there to be a `celty` user that has read permissions to `/usr/local/` and write permissions to `/usr/local/etc/celty`. Celty will attempt to run as that user whenever it is daemonized.
+
+To change the user, either rebuild Celty with a new default or if you are using `systemd` change the `User` field.
+
 Once you have it built and installed, the modules, documentation, example configurations are all installed, as well as if your platform has a start script like `systemd` or the FreeBSD `rc.d` system that will also be installed.
 
 So for any `systemd` platform, after the install you can just do the following:

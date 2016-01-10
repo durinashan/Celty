@@ -264,8 +264,8 @@ static void daemonize(const char *lockfile) {
 		lockh = flock(lockfp, LOCK_EX | LOCK_NB);
 		if(lockh < 0) {
 			std::cerr << "[!] Unable to obtain lock on file " << lockfile << ", error code:" << errno << " ("
-					  << strerror(errno) << ")" << std::endl;
-			syslog(LOG_ERR, "Unable to obtain lock on file %s, error code: %d (%s)", lockfile, errno, strerror(errno));
+					  << strerror(errno) << ") Is celty already running?" << std::endl;
+			syslog(LOG_ERR, "Unable to obtain lock on file %s, error code: %d (%s) Is celty already running?", lockfile, errno, strerror(errno));
 			exit(-1);
 		}
 
@@ -278,6 +278,7 @@ static void daemonize(const char *lockfile) {
 			setuid(pw->pw_uid);
 		}
 	}
+	syslog(LOG_INFO, "Running as user %s", getlogin());
 	/* Register signal handlers */
 	signal(SIGALRM, sighndl);
 	signal(SIGTERM, sighndl);
@@ -361,6 +362,9 @@ static void sighndl(int sid) {
 		}
 		case SIGUSR1: {
 			/* --sig status */
+			/* We don't do anything, */
+			syslog(LOG_INFO, "I am, in fact, alive");
+			break;
 		}
 		case SIGHUP: {
 			/* --sig reload */
@@ -397,6 +401,8 @@ static void dispatch(const char *signame) {
 	} else if (strncmp(signame, "halt", 4) == 0) {
 		std::cout << "[@] Stopping Celty..." << std::endl;
 		sig = SIGTERM;
+	} else if (strncmp(signame, "status", 6) == 0) {
+		sig = SIGUSR1;
 	} else {
 		std::cerr << "Unknown signal '" << signame << "'" << std::endl;
 	}
@@ -405,6 +411,10 @@ static void dispatch(const char *signame) {
 		if (kill(pid, sig) < 0) {
 			std::cerr << "Unable to send signal, error code: " << errno << " (" << strerror(errno) << ")" << std::endl;
 			exit(-1);
+		} else {
+			if (sig == SIGUSR1) {
+				std::cout << "[@] Running" << std::endl;
+			}
 		}
 	}
 }

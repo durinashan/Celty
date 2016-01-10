@@ -3,6 +3,7 @@ Description=Celty BitTorrent Tracker
 After=network.target
 
 [Service]
+User=celty
 Type=forking
 PIDFile=/tmp/celty.pid
 ExecStart=/usr/local/bin/celty

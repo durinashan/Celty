@@ -20,7 +20,7 @@ include_directories(include)
 option(AFL_BUILD "Builds with the american fuzzy lop shim and runs as a fuzz test" OFF)
 
 set(DAEMON_NAME "celty" CACHE STRING "The name of the daemon")
-set(DEFAULT_RUNAS "nobody" CACHE STRING "The default user to run as")
+set(DEFAULT_RUNAS "celty" CACHE STRING "The default user to run as")
 set(DEFAULT_LOCKFILE "${DAEMON_NAME}.lwk" CACHE STRING "The default PID lockfile name")
 set(DEFAULT_LOCKDIR "/var/lock/subsys/" CACHE PATH "The default lock directory")
 set(DEFAULT_WORKINGDIR "/" CACHE PATH "The default working directory")

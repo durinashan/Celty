@@ -40,7 +40,7 @@ For the most part the default options will be fine, but if you want to change an
 | `DEFAULT_MODULEDIR`    | `$(CMAKE_INSTALL_PREFIX)/lib/celty` | The location where celty looks for modules. |
 | `DEFAULT_MODULEEXT`    | `.moe`       | The extension of the module to load. 
 | `BUILD_MODULES`        | `yes`        | Builds the modules along with Celty.|
-| `DEFAULT_RUNAS`        | `nobody`     | The user to run the daemon as. |
+| `DEFAULT_RUNAS`        | `celty`     | The user to run the daemon as. |
 | `DEFAULT_WORKINGDIR`   | `/`          | The working directory to use when running as a daemon. |
 | `CONFIG_DIRECTORY`     | `$(CMAKE_INSTALL_PREFIX)/etc` | The default directory that Celty will look for configuration files in. |
 | `CONFIG_FILE`          | `celty.cfg`   | The default name of the configuration file that Celty will look for. |
