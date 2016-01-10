@@ -28,7 +28,7 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - cmake ../ -DBUILD_MODULES=OFF
+  - cmake ../ -DBUILD_MODULES=OFF -DDEFAULT_LOCKDIR='/tmp'
 script:
   - make
   - ./../bin/celty -c $(pwd)/../etc/celty.cfg -m $(pwd)
