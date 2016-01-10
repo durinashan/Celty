@@ -39,6 +39,9 @@
 *.sdf
 *.opensdf
 
+*.gcov
+*.gcno
+*.gcda
 *.sublime-workspace
 .gdb_history
 *.lwk

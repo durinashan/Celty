@@ -1,44 +1,44 @@
 sudo: false
 language: cpp
 compiler:
-	- gcc
-	- clang
+  - gcc
+  - clang
 env:
-	- CE_BUILD_TYPE=Debug
-	- CE_BUILD_TYPE=Release
+  - CE_BUILD_TYPE=Debug
+  - CE_BUILD_TYPE=Release
 os:
-	- linux
-	# - osx
+  - linux
+  # - osx
 matrix:
-	allow_failures:
-		- os: osx
+  allow_failures:
+    - os: osx
 addons:
-	 apt:
-			sources:
-				 - ubuntu-toolchain-r-test
-			packages:
-				 - g++-5
-				 - cmake
-				 - libev-dev
-				 - libpqxx3-dev
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-5
+      - cmake
+      - libev-dev
+      - libpqxx3-dev
 before_install:
-	- if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
-	- pip install --user codecov
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+  - pip install --user codecov
 before_script:
-	- mkdir build
-	- cd build
-	- cmake ../ -DBUILD_MODULES=OFF -DDEFAULT_LOCKDIR='/tmp'
+  - mkdir build
+  - cd build
+  - cmake ../ -DBUILD_MODULES=OFF -DDEFAULT_LOCKDIR='/tmp'
 script:
-	- make
-	- ./../bin/celty -c $(pwd)/../etc/celty.cfg -m $(pwd)
-	- sleep 5
-	- ./../bin/celty -s halt
+  - make
+  - ./../bin/celty -c $(pwd)/../etc/celty.cfg -m $(pwd)
+  - sleep 5
+  - ./../bin/celty -s halt
 notifications:
-	irc:
-		channels:
-			- "irc.bad-alloc.net:6669#bad_alloc"
-		template:
-			- "%{repository_slug} (%{branch} @ %{commit}) : %{message} %{result} "
+  irc:
+    channels:
+      - "irc.bad-alloc.net:6669#bad_alloc"
+    template:
+      - "%{repository_slug} (%{branch} @ %{commit}) : %{message} %{result} "
 after_success:
-	- cd ..
-	- codecov
+  - cd ..
+  - codecov
