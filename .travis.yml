@@ -24,6 +24,7 @@ addons:
          - libpqxx3-dev
 before_install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+  - pip install --user codecov
 before_script:
   - mkdir build
   - cd build
@@ -36,3 +37,5 @@ notifications:
       - "irc.bad-alloc.net:6669#bad_alloc"
     template:
       - "%{repository_slug} (%{branch} @ %{commit}) : %{message} %{result} "
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
