@@ -72,6 +72,8 @@ $ ./celty --sig halt
 ## Configuring
 The configuration is stored in a simple key-value list that allows the simple setting of options and values. For more information on this as well as documentation on all of the settings, see [CONFIGURATION.md](https://github.com/XAMPP/Celty/blob/master/docs/CONFIGURATION.md)
 
+The default configuration should be good enough for just setting it up to run.
+
 ## Modules
 Celty for the most part is all self contained, but if you want to extend this functionality then modules are what you want.
 
