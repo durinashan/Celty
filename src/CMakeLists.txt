@@ -37,8 +37,6 @@ configure_file ("${PROJECT_ETC_DIR}/celty-config.hh.in"
 
 include_directories(${PROJECT_BINARY_DIR})
 
-
-
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -coverage -g")
 else()
@@ -75,5 +73,3 @@ if(SYSTEMD_FOUND)
 endif()
 
 install(FILES "${PROJECT_DOC_DIR}/celty.1" DESTINATION man/man1)
-
-

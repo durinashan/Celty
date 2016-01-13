@@ -5,6 +5,9 @@
 #include <string>
 #include <ev++.h>
 
+#include <sys/socket.h>
+
+#include <vector>
 #include <thread>
 
 namespace Celty {
@@ -28,6 +31,13 @@ class Endpoint {
 	std::string listen;
 	std::string port;
 	int maxconn;
+
+	typedef struct _raw_client_t {
+		struct sockaddr_storage addr;
+		int sock_fd;
+	} RawClient;
+
+	std::vector<RawClient> ClientList;
 
 	void Runner(void);
 	void Timeout(void);
