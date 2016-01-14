@@ -62,6 +62,9 @@ The time that must pass on a request in order for it to timeout.
 ##### HTTPWriteTimeout
 	default: 4s
 The time that must pass on a write in order for it to timeout.
+##### HTTPPendingConnections
+	default: 10
+The number of connections to backlog
 ##### InactiveRatio
 	default: 2.0
 The ratio that must be reached in order for a client to not be marked as Inactive.
