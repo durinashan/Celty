@@ -1,0 +1,50 @@
+# Maintainer: XAMPP <vijay@lethalbit.net>
+pkgname=celty-git
+pkgver=r93.f0a26cc
+pkgrel=1
+pkgdesc="Dead simple, extensible, Unix BitTorrent tracker"
+arch=('i686' 'x86_64')
+url="https://github.com/XAMPP/Celty"
+license=('MIT')
+depends=('libev>=4.20' 'libpqxx>=4.0.1' 'libmemcached>=1.0.18')
+makedepends=('git' 'cmake' 'gcc>=5.3.0')
+source=("celty::git+https://github.com/XAMPP/Celty.git")
+noextract=()
+md5sums=('SKIP')
+sha256sums=('SKIP')
+
+__giturl__=https://github.com/XAMPP/Celty.git
+__gitclonedir__=celty
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$__gitclonedir__" ]]; then
+    cd "$__gitclonedir__" && git pull origin master
+    msg "The local files are updated."
+  else
+    git clone "$__giturl__" "$__gitclonedir__"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$__gitclonedir__/build"
+  mkdir "$srcdir/$__gitclonedir__/build"
+  cd "$srcdir/$__gitclonedir__/build"
+
+  cmake ../
+  make
+}
+
+pkgver() {
+  cd "$srcdir/$__gitclonedir__"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+  cd "$srcdir/$__gitclonedir__/build"
+  make DESTDIR="$pkgdir/" install
+}
+
