@@ -13,38 +13,38 @@ noextract=()
 md5sums=('SKIP')
 sha256sums=('SKIP')
 
-__giturl__=https://github.com/XAMPP/Celty.git
-__gitclonedir__=celty
+_giturl=https://github.com/XAMPP/Celty.git
+_gitclonedir=celty
 
 build() {
   cd "$srcdir"
   msg "Connecting to GIT server...."
 
-  if [[ -d "$__gitclonedir__" ]]; then
-    cd "$__gitclonedir__" && git pull origin master
+  if [[ -d "$_gitclonedir" ]]; then
+    cd "$_gitclonedir" && git pull origin master
     msg "The local files are updated."
   else
-    git clone "$__giturl__" "$__gitclonedir__"
+    git clone "$_giturl" "$_gitclonedir"
   fi
 
   msg "GIT checkout done or server timeout"
   msg "Starting build..."
 
-  rm -rf "$srcdir/$__gitclonedir__/build"
-  mkdir "$srcdir/$__gitclonedir__/build"
-  cd "$srcdir/$__gitclonedir__/build"
+  rm -rf "$srcdir/$_gitclonedir/build"
+  mkdir "$srcdir/$_gitclonedir/build"
+  cd "$srcdir/$_gitclonedir/build"
 
   cmake ../
   make
 }
 
 pkgver() {
-  cd "$srcdir/$__gitclonedir__"
+  cd "$srcdir/$_gitclonedir"
   printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 package() {
-  cd "$srcdir/$__gitclonedir__/build"
+  cd "$srcdir/$_gitclonedir/build"
   make DESTDIR="$pkgdir/" install
 }
 
