@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-MAINTAINER Celty Project ""
+MAINTAINER Vijay A. Van Ness <vijay@lethalbit.net>
 EXPOSE 6881
 EXPOSE 6881/udp
 # Create Celty user
